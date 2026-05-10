@@ -1,0 +1,305 @@
+version: "3.8"
+
+services:
+
+  # --- MS_CARRITO (katerine) ---
+  mysql-carrito:
+    image: mysql:8.0
+    container_name: mysql-carrito
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: carrito_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_carrito_data:/var/lib/mysql
+
+  ms-carrito:
+    build:
+      context: ./ms_carrito
+    container_name: ms-carrito
+    restart: always
+    depends_on:
+      - mysql-carrito
+      - ms-usuarios
+      - ms-productos
+      - ms-tallas
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-carrito:3306/carrito_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      MS_USUARIOS_URL: http://ms-usuarios:8090
+      MS_PRODUCTOS_URL: http://ms-productos:8087
+      MS_TALLAS_URL: http://ms-tallas:8089
+
+  # --- MS_CATEGORIAS (silvia) ---
+  mysql-categorias:
+    image: mysql:8.0
+    container_name: mysql-categorias
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: categorias_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_categorias_data:/var/lib/mysql
+
+  ms-categorias:
+    build:
+      context: ./ms_categorias
+    container_name: ms-categorias
+    restart: always
+    depends_on:
+      - mysql-categorias
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-categorias:3306/categorias_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  # --- MS_ENVIOS (silvia) ---
+  mysql-envios:
+    image: mysql:8.0
+    container_name: mysql-envios
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: envios_db
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_envios_data:/var/lib/mysql
+
+  ms-envios:
+    build:
+      context: ./ms_envios
+    container_name: ms-envios
+    restart: always
+    depends_on:
+      - mysql-envios
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-envios:3306/envios_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  # --- MS_INVENTARIO (katerine) ---
+  mysql-inventario:
+    image: mysql:8.0
+    container_name: mysql-inventario
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: inventario_db
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_inventario_data:/var/lib/mysql
+
+  ms-inventario:
+    build:
+      context: ./ms_inventario
+    container_name: ms-inventario
+    restart: always
+    depends_on:
+      - mysql-inventario
+      - ms-productos
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-inventario:3306/inventario_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      MS_PRODUCTOS_URL: http://ms-productos:8087
+
+  # --- MS_PAGOS (silvia) ---
+  mysql-pagos:
+    image: mysql:8.0
+    container_name: mysql-pagos
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: pagos_db
+    ports:
+      - "3311:3306"
+    volumes:
+      - mysql_pagos_data:/var/lib/mysql
+
+  ms-pagos:
+    build:
+      context: ./ms_pagos
+    container_name: ms-pagos
+    restart: always
+    depends_on:
+      - mysql-pagos
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-pagos:3306/pagos_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  # --- MS_PEDIDOS (katerine) ---
+  mysql-pedidos:
+    image: mysql:8.0
+    container_name: mysql-pedidos
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: pedidos_db
+    ports:
+      - "3312:3306"
+    volumes:
+      - mysql_pedidos_data:/var/lib/mysql
+
+  ms-pedidos:
+    build:
+      context: ./ms_pedidos
+    container_name: ms-pedidos
+    restart: always
+    depends_on:
+      - mysql-pedidos
+      - ms-usuarios
+      - ms-carrito
+      - ms-inventario
+      - ms-pagos
+      - ms-envios
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-pedidos:3306/pedidos_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      MS_USUARIOS_URL: http://ms-usuarios:8090
+      MS_CARRITO_URL: http://ms-carrito:8081
+      MS_INVENTARIO_URL: http://ms-inventario:8084
+      MS_PAGOS_URL: http://ms-pagos:8085
+      MS_ENVIOS_URL: http://ms-envios:8083
+
+  # --- MS_PRODUCTOS (katerine) ---
+  mysql-productos:
+    image: mysql:8.0
+    container_name: mysql-productos
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: productos_db
+    ports:
+      - "3313:3306"
+    volumes:
+      - mysql_productos_data:/var/lib/mysql
+
+  ms-productos:
+    build:
+      context: ./ms_productos
+    container_name: ms-productos
+    restart: always
+    depends_on:
+      - mysql-productos
+      - ms-categorias
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-productos:3306/productos_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      MS_CATEGORIAS_URL: http://ms-categorias:8082
+
+  # --- MS_RESEÑAS (silvia) ---
+  mysql-reseñas:
+    image: mysql:8.0
+    container_name: mysql-reseñas
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: reseñas_db
+    ports:
+      - "3314:3306"
+    volumes:
+      - mysql_reseñas_data:/var/lib/mysql
+
+  ms-reseñas:
+    build:
+      context: ./ms_reseñas
+    container_name: ms-reseñas
+    restart: always
+    depends_on:
+      - mysql-reseñas
+    ports:
+      - "8088:8088"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-reseñas:3306/reseñas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  # --- MS_TALLAS (silvia) ---
+  mysql-tallas:
+    image: mysql:8.0
+    container_name: mysql-tallas
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: tallas_db
+    ports:
+      - "3315:3306"
+    volumes:
+      - mysql_tallas_data:/var/lib/mysql
+
+  ms-tallas:
+    build:
+      context: ./ms_tallas
+    container_name: ms-tallas
+    restart: always
+    depends_on:
+      - mysql-tallas
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-tallas:3306/tallas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  # --- MS_USUARIOS (katerine) ---
+  mysql-usuarios:
+    image: mysql:8.0
+    container_name: mysql-usuarios
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: usuarios_db
+    ports:
+      - "3316:3306"
+    volumes:
+      - mysql_usuarios_data:/var/lib/mysql
+
+  ms-usuarios:
+    build:
+      context: ./ms_usuarios
+    container_name: ms-usuarios
+    restart: always
+    depends_on:
+      - mysql-usuarios
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-usuarios:3306/usuarios_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+volumes:
+  mysql_carrito_data:
+  mysql_categorias_data:
+  mysql_envios_data:
+  mysql_inventario_data:
+  mysql_pagos_data:
+  mysql_pedidos_data:
+  mysql_productos_data:
+  mysql_reseñas_data:
+  mysql_tallas_data:
+  mysql_usuarios_data:

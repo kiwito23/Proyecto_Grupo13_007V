@@ -1,0 +1,36 @@
+package com.TiendaRopa.ms_carrito.Config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+public class WebClientConfig {
+
+    @Value("${ms.usuarios.url}")
+    private String msUsuariosUrl;
+
+    @Value("${ms.productos.url}")
+    private String msProductosUrl;
+
+    @Value("${ms.tallas.url}")
+    private String msTallasUrl;
+
+    @Bean
+    public WebClient webClientUsuarios(WebClient.Builder builder) {
+        return builder.baseUrl(msUsuariosUrl).build();
+    }
+
+    @Bean
+    public WebClient webClientProductos(WebClient.Builder builder) {
+        return builder.baseUrl(msProductosUrl).build();
+    }
+
+    @Bean
+    public WebClient webClientTallas(WebClient.Builder builder) {
+        return builder.baseUrl(msTallasUrl).build();
+    }
+}
+
+
