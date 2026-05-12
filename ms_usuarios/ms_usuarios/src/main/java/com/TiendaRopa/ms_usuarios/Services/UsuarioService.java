@@ -74,4 +74,5 @@ public class UsuarioService {
         usuarioRepository.save(usuarioExistente);
         log.info("Usuario desactivado con ID: {}", id);
     }
+
 }
