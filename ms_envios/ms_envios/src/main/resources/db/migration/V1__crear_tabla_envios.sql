@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS envios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id BIGINT NOT NULL,
+    usuario_id BIGINT NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    ciudad VARCHAR(100) NOT NULL,
+    estado VARCHAR(50) NOT NULL DEFAULT 'PREPARANDO',
+    numero_seguimiento VARCHAR(50)
+);
