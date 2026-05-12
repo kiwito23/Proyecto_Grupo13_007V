@@ -51,6 +51,7 @@ public class UsuarioService {
         UsuarioModel usuarioGuardado = usuarioRepository.save(usuario);
         log.info("Usuario creado exitosamente con id {}", usuarioGuardado.getId());
         return usuarioGuardado;
+        
     }
 
     public UsuarioModel actualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
@@ -73,5 +74,4 @@ public class UsuarioService {
         usuarioRepository.save(usuarioExistente);
         log.info("Usuario desactivado con ID: {}", id);
     }
-
 }
