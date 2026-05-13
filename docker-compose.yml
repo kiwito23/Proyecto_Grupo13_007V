@@ -17,14 +17,11 @@ services:
 
   ms-carrito:
     build:
-      context: ./ms_carrito
+      context: ./ms_carrito/ms_carrito
     container_name: ms-carrito
     restart: always
     depends_on:
       - mysql-carrito
-      - ms-usuarios
-      - ms-productos
-      - ms-tallas
     ports:
       - "8081:8081"
     environment:
@@ -50,7 +47,7 @@ services:
 
   ms-categorias:
     build:
-      context: ./ms_categorias
+      context: ./ms_categorias/ms_categorias
     container_name: ms-categorias
     restart: always
     depends_on:
@@ -77,7 +74,7 @@ services:
 
   ms-envios:
     build:
-      context: ./ms_envios
+      context: ./ms_envios/ms_envios
     container_name: ms-envios
     restart: always
     depends_on:
@@ -88,6 +85,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-envios:3306/envios_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PEDIDOS_URL: http://ms-pedidos:8086
 
   # --- MS_INVENTARIO (katerine) ---
   mysql-inventario:
@@ -104,12 +102,11 @@ services:
 
   ms-inventario:
     build:
-      context: ./ms_inventario
+      context: ./ms_inventario/ms_inventario
     container_name: ms-inventario
     restart: always
     depends_on:
       - mysql-inventario
-      - ms-productos
     ports:
       - "8084:8084"
     environment:
@@ -133,7 +130,7 @@ services:
 
   ms-pagos:
     build:
-      context: ./ms_pagos
+      context: ./ms_pagos/ms_pagos
     container_name: ms-pagos
     restart: always
     depends_on:
@@ -144,6 +141,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-pagos:3306/pagos_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PEDIDOS_URL: http://ms-pedidos:8086
 
   # --- MS_PEDIDOS (katerine) ---
   mysql-pedidos:
@@ -160,16 +158,11 @@ services:
 
   ms-pedidos:
     build:
-      context: ./ms_pedidos
+      context: ./ms_pedidos/ms_pedidos
     container_name: ms-pedidos
     restart: always
     depends_on:
       - mysql-pedidos
-      - ms-usuarios
-      - ms-carrito
-      - ms-inventario
-      - ms-pagos
-      - ms-envios
     ports:
       - "8086:8086"
     environment:
@@ -197,12 +190,11 @@ services:
 
   ms-productos:
     build:
-      context: ./ms_productos
+      context: ./ms_productos/ms_productos
     container_name: ms-productos
     restart: always
     depends_on:
       - mysql-productos
-      - ms-categorias
     ports:
       - "8087:8087"
     environment:
@@ -211,32 +203,33 @@ services:
       SPRING_DATASOURCE_PASSWORD: root123
       MS_CATEGORIAS_URL: http://ms-categorias:8082
 
-  # --- MS_RESEÑAS (silvia) ---
-  mysql-reseñas:
+  # --- MS_RESENAS (silvia) ---
+  mysql-resenas:
     image: mysql:8.0
-    container_name: mysql-reseñas
+    container_name: mysql-resenas
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: reseñas_db
+      MYSQL_DATABASE: resenas_db
     ports:
       - "3314:3306"
     volumes:
-      - mysql_reseñas_data:/var/lib/mysql
+      - mysql_resenas_data:/var/lib/mysql
 
-  ms-reseñas:
+  ms-resenas:
     build:
-      context: ./ms_reseñas
-    container_name: ms-reseñas
+      context: ./ms_reseñas/ms_reseñas
+    container_name: ms-resenas
     restart: always
     depends_on:
-      - mysql-reseñas
+      - mysql-resenas
     ports:
       - "8088:8088"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-reseñas:3306/reseñas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-resenas:3306/resenas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PRODUCTOS_URL: http://ms-productos:8087
 
   # --- MS_TALLAS (silvia) ---
   mysql-tallas:
@@ -253,7 +246,7 @@ services:
 
   ms-tallas:
     build:
-      context: ./ms_tallas
+      context: ./ms_tallas/ms_tallas
     container_name: ms-tallas
     restart: always
     depends_on:
@@ -280,7 +273,7 @@ services:
 
   ms-usuarios:
     build:
-      context: ./ms_usuarios
+      context: ./ms_usuarios/ms_usuarios
     container_name: ms-usuarios
     restart: always
     depends_on:
@@ -300,6 +293,6 @@ volumes:
   mysql_pagos_data:
   mysql_pedidos_data:
   mysql_productos_data:
-  mysql_reseñas_data:
+  mysql_resenas_data:
   mysql_tallas_data:
   mysql_usuarios_data:
