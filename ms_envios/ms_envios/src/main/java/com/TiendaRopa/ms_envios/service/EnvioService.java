@@ -4,19 +4,20 @@ import com.TiendaRopa.ms_envios.dto.EnvioDTO;
 import com.TiendaRopa.ms_envios.model.Envio;
 import com.TiendaRopa.ms_envios.repository.EnvioRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EnvioService {
 
-    private static final Logger log = LoggerFactory.getLogger(EnvioService.class);
     private final EnvioRepository envioRepository;
+    private final WebClient webClientPedidos;
 
     public List<Envio> obtenerTodos() {
         log.info("Obteniendo todos los envios");
@@ -40,6 +41,19 @@ public class EnvioService {
     }
 
     public Envio crear(EnvioDTO dto) {
+        log.info("Verificando pedido {} en ms-pedidos", dto.getPedidoId());
+        try {
+            webClientPedidos.get()
+                    .uri("/api/pedidos/{id}", dto.getPedidoId())
+                    .retrieve()
+                    .bodyToMono(Object.class)
+                    .block();
+            log.info("Pedido {} verificado correctamente", dto.getPedidoId());
+        } catch (Exception e) {
+            log.error("Pedido no encontrado con id: {}", dto.getPedidoId());
+            throw new RuntimeException("El pedido con id " + dto.getPedidoId() + " no existe");
+        }
+
         log.info("Creando envio para pedido: {}", dto.getPedidoId());
         Envio envio = new Envio();
         envio.setPedidoId(dto.getPedidoId());

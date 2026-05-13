@@ -4,18 +4,19 @@ import com.TiendaRopa.ms_resenas.dto.ResenaDTO;
 import com.TiendaRopa.ms_resenas.model.Resena;
 import com.TiendaRopa.ms_resenas.repository.ResenaRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ResenaService {
 
-    private static final Logger log = LoggerFactory.getLogger(ResenaService.class);
     private final ResenaRepository resenaRepository;
+    private final WebClient webClientProductos;
 
     public List<Resena> obtenerTodas() {
         log.info("Obteniendo todas las resenas");
@@ -39,7 +40,19 @@ public class ResenaService {
     }
 
     public Resena crear(ResenaDTO dto) {
-        log.info("Creando resena para producto: {}", dto.getProductoId());
+        log.info("Verificando producto {} en ms-productos", dto.getProductoId());
+        try {
+            webClientProductos.get()
+                    .uri("/api/productos/{id}", dto.getProductoId())
+                    .retrieve()
+                    .bodyToMono(Object.class)
+                    .block();
+            log.info("Producto {} verificado correctamente", dto.getProductoId());
+        } catch (Exception e) {
+            log.error("Producto no encontrado con id: {}", dto.getProductoId());
+            throw new RuntimeException("El producto con id " + dto.getProductoId() + " no existe");
+        }
+
         Resena resena = new Resena();
         resena.setUsuarioId(dto.getUsuarioId());
         resena.setProductoId(dto.getProductoId());
