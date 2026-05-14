@@ -1,14 +1,14 @@
 package com.TiendaRopa.ms_envios.repository;
 
-import com.TiendaRopa.ms_envios.model.Envio;
+import com.TiendaRopa.ms_envios.Model.EnvioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface EnvioRepository extends JpaRepository<Envio, Long> {
-    List<Envio> findByUsuarioId(Long usuarioId);
-    List<Envio> findByEstado(String estado);
-    Envio findByPedidoId(Long pedidoId);
+public interface EnvioRepository extends JpaRepository<EnvioModel, Long> {
+    List<EnvioModel> findByUsuarioId(Long usuarioId);
+    List<EnvioModel> findByEstado(String estado);
+    EnvioModel findByPedidoId(Long pedidoId);
 }

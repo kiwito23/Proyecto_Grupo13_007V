@@ -3,6 +3,7 @@ package com.TiendaRopa.ms_productos.Service;
 import com.TiendaRopa.ms_productos.DTO.ProductosDTO;
 import com.TiendaRopa.ms_productos.Model.ProductosModel;
 import com.TiendaRopa.ms_productos.Repositories.ProductoRepository;
+import com.TiendaRopa.ms_productos.Exceptions.ProductoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class ProductosService {
         return productoRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Producto no encontrado con id: {}", id);
-                    return new RuntimeException("Producto no encontrado con id: " + id);
+                    return new ProductoNotFoundException("Producto no encontrado con id: " + id);
                 });
     }
 
@@ -94,7 +95,7 @@ public class ProductosService {
             log.info("Categoría id: {} validada correctamente", categoriaId);
         } catch (Exception e) {
             log.error("Categoría no encontrada en ms-categorias con id: {}", categoriaId);
-            throw new RuntimeException("La categoría con id " + categoriaId + " no existe");
+            throw new ProductoNotFoundException("La categoría con id " + categoriaId + " no existe");
         }
     }
 

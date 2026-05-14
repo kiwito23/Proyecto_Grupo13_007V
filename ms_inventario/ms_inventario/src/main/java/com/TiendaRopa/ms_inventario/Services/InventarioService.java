@@ -6,6 +6,7 @@ import com.TiendaRopa.ms_inventario.Model.InventarioModel;
 import com.TiendaRopa.ms_inventario.Model.MovimientosInventarioModel;
 import com.TiendaRopa.ms_inventario.Repositories.InventarioRepository;
 import com.TiendaRopa.ms_inventario.Repositories.MovimientosInventarioRepository;
+import com.TiendaRopa.ms_inventario.Exceptions.InventarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class InventarioService {
         return inventarioRepository.findByProductoId(productoId)
                 .orElseThrow(() -> {
                     log.error("Inventario no encontrado para el producto ID: {}", productoId);
-                    return new RuntimeException("Inventario no encontrado para el producto ID: " + productoId);
+                    return new InventarioNotFoundException("Inventario no encontrado para el producto ID: " + productoId);
                 });
     }
 
@@ -43,7 +44,7 @@ public class InventarioService {
 
         if (inventarioRepository.existsByProductoId(inventarioDTO.getProductoId())) {
             log.error("Ya existe un inventario para el producto ID: {}", inventarioDTO.getProductoId());
-            throw new RuntimeException("Ya existe un inventario para el producto ID: " + inventarioDTO.getProductoId());
+            throw new InventarioNotFoundException("Ya existe un inventario para el producto ID: " + inventarioDTO.getProductoId());
         }
 
         InventarioModel inventario = new InventarioModel();

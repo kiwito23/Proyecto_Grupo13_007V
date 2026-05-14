@@ -3,6 +3,7 @@ package com.TiendaRopa.ms_usuarios.Services;
 import com.TiendaRopa.ms_usuarios.DTO.UsuarioDTO;
 import com.TiendaRopa.ms_usuarios.Model.UsuarioModel;
 import com.TiendaRopa.ms_usuarios.Repositories.UsuarioRepository;
+import com.TiendaRopa.ms_usuarios.Exceptions.UsuarioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UsuarioService {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Usuario no encontrado con ID: {}", id);
-                    return new RuntimeException("Usuario no encontrado con ID: " + id);
+                    return new UsuarioNotFoundException("Usuario no encontrado con ID: " + id);
                 });
     }
 
@@ -35,7 +36,7 @@ public class UsuarioService {
 
         if (usuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
             log.error("Ya existe un usuario con email: {}", usuarioDTO.getEmail());
-            throw new RuntimeException("Ya existe un usuario con email: " + usuarioDTO.getEmail());
+            throw new UsuarioNotFoundException("Ya existe un usuario con email: " + usuarioDTO.getEmail());
         }
 
         UsuarioModel usuario = new UsuarioModel();

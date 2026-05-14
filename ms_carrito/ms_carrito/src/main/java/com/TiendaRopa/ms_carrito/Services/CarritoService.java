@@ -1,6 +1,7 @@
 package com.TiendaRopa.ms_carrito.Services;
 
 import com.TiendaRopa.ms_carrito.DTO.ItemCarritoDTO;
+import com.TiendaRopa.ms_carrito.Exceptions.CarritoNotFoundException;
 import com.TiendaRopa.ms_carrito.Model.CarritoModel;
 import com.TiendaRopa.ms_carrito.Model.ItemCarritoModel;
 import com.TiendaRopa.ms_carrito.Repositories.CarritoRepository;
@@ -79,7 +80,7 @@ public class CarritoService {
         CarritoModel carrito = obtenerOCrearCarrito(usuarioId);
         ItemCarritoModel item = itemCarritoRepository
                 .findByCarritoIdAndProductoId(carrito.getId(), productoId)
-                .orElseThrow(() -> new RuntimeException("El producto no está en el carrito"));
+                .orElseThrow(() -> new CarritoNotFoundException("El producto no está en el carrito"));
         itemCarritoRepository.delete(item);
         log.info("Item eliminado del carrito");
     }
