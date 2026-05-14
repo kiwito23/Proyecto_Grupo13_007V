@@ -22,9 +22,6 @@ services:
     restart: always
     depends_on:
       - mysql-carrito
-      - ms-usuarios
-      - ms-productos
-      - ms-tallas
     ports:
       - "8081:8081"
     environment:
@@ -50,8 +47,13 @@ services:
 
   ms-categorias:
     build:
+<<<<<<< HEAD
       context: ./ms_categorias
     container_name: ms-categorias/me_categorias
+=======
+      context: ./ms_categorias/ms_categorias
+    container_name: ms-categorias
+>>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
     restart: always
     depends_on:
       - mysql-categorias
@@ -88,6 +90,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-envios:3306/envios_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PEDIDOS_URL: http://ms-pedidos:8086
 
   # --- MS_INVENTARIO (katerine) ---
   mysql-inventario:
@@ -109,7 +112,6 @@ services:
     restart: always
     depends_on:
       - mysql-inventario
-      - ms-productos
     ports:
       - "8084:8084"
     environment:
@@ -144,6 +146,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-pagos:3306/pagos_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PEDIDOS_URL: http://ms-pedidos:8086
 
   # --- MS_PEDIDOS (katerine) ---
   mysql-pedidos:
@@ -165,11 +168,6 @@ services:
     restart: always
     depends_on:
       - mysql-pedidos
-      - ms-usuarios
-      - ms-carrito
-      - ms-inventario
-      - ms-pagos
-      - ms-envios
     ports:
       - "8086:8086"
     environment:
@@ -202,7 +200,6 @@ services:
     restart: always
     depends_on:
       - mysql-productos
-      - ms-categorias
     ports:
       - "8087:8087"
     environment:
@@ -211,7 +208,11 @@ services:
       SPRING_DATASOURCE_PASSWORD: root123
       MS_CATEGORIAS_URL: http://ms-categorias:8082
 
+<<<<<<< HEAD
   # --- MS_RESEÑAS (silvia) ---
+=======
+  # --- MS_RESENAS (silvia) ---
+>>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
   mysql-resenas:
     image: mysql:8.0
     container_name: mysql-resenas
@@ -237,6 +238,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-resenas:3306/resenas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      MS_PRODUCTOS_URL: http://ms-productos:8087
 
   # --- MS_TALLAS (silvia) ---
   mysql-tallas:

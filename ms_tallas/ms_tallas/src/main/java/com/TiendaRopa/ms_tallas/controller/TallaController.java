@@ -1,4 +1,4 @@
-package com.TiendaRopa.ms_tallas.controler;
+package com.TiendaRopa.ms_tallas.controller;
 
 import com.TiendaRopa.ms_tallas.dto.TallaDTO;
 import com.TiendaRopa.ms_tallas.model.Talla;

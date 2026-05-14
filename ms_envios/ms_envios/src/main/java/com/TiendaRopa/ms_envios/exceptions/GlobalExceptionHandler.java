@@ -1,4 +1,4 @@
-package com.TiendaRopa.ms_pagos.exception;
+package com.TiendaRopa.ms_envios.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

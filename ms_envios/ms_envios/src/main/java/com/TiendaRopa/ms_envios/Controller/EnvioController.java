@@ -1,4 +1,4 @@
-package com.TiendaRopa.ms_envios.Controller;
+package com.TiendaRopa.ms_envios.controller;
 
 import com.TiendaRopa.ms_envios.dto.EnvioDTO;
 import com.TiendaRopa.ms_envios.Model.EnvioModel;
@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController

@@ -4,19 +4,20 @@ import com.TiendaRopa.ms_pagos.dto.PagoDTO;
 import com.TiendaRopa.ms_pagos.model.Pago;
 import com.TiendaRopa.ms_pagos.repository.PagoRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PagoService {
 
-    private static final Logger log = LoggerFactory.getLogger(PagoService.class);
     private final PagoRepository pagoRepository;
+    private final WebClient webClientPedidos;
 
     public List<Pago> obtenerTodos() {
         log.info("Obteniendo todos los pagos");
@@ -40,6 +41,19 @@ public class PagoService {
     }
 
     public Pago crear(PagoDTO dto) {
+        log.info("Verificando pedido {} en ms-pedidos", dto.getPedidoId());
+        try {
+            webClientPedidos.get()
+                    .uri("/api/pedidos/{id}", dto.getPedidoId())
+                    .retrieve()
+                    .bodyToMono(Object.class)
+                    .block();
+            log.info("Pedido {} verificado correctamente", dto.getPedidoId());
+        } catch (Exception e) {
+            log.error("Pedido no encontrado con id: {}", dto.getPedidoId());
+            throw new RuntimeException("El pedido con id " + dto.getPedidoId() + " no existe");
+        }
+
         log.info("Procesando pago para pedido: {}", dto.getPedidoId());
         Pago pago = new Pago();
         pago.setPedidoId(dto.getPedidoId());
