@@ -25,4 +25,7 @@ public class ItemCarritoModel {
 
     @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
+
+    @Column(name = "talla_id", nullable = false)
+    private Long tallaId;
 }

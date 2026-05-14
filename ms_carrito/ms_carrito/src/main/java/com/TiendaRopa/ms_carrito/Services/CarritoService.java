@@ -60,6 +60,7 @@ public class CarritoService {
                             nuevoItem.setProductoId(itemCarritoDTO.getProductoId());
                             nuevoItem.setCantidad(itemCarritoDTO.getCantidad());
                             nuevoItem.setPrecioUnitario(itemCarritoDTO.getPrecioUnitario());
+                            nuevoItem.setTallaId(itemCarritoDTO.getTallaId());
                             itemCarritoRepository.save(nuevoItem);
                             log.info("Nuevo item agregado al carrito");
                         }
