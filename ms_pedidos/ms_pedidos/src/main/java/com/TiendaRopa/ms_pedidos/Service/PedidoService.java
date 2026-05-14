@@ -121,7 +121,6 @@ public class PedidoService {
         }
     }
 
-    // Llama a ms-carrito para vaciarlo tras crear el pedido
     private void vaciarCarrito(Long usuarioId) {
         try {
             log.info("Vaciando carrito del usuario {}", usuarioId);
@@ -138,17 +137,14 @@ public class PedidoService {
     public PedidoModel crearDesdCarrito(PedidoDTO pedidoDTO) {
     log.info("Creando pedido para usuario id: {}", pedidoDTO.getUsuarioId());
 
-    // 1. Validar que el usuario existe
     validarUsuarioExiste(pedidoDTO.getUsuarioId());
 
-    // 2. Obtener items del carrito
     List<JsonNode> items = obtenerItemsCarrito(pedidoDTO.getUsuarioId());
     if (items.isEmpty()) {
         log.warn("El carrito del usuario {} está vacío", pedidoDTO.getUsuarioId());
         throw new RuntimeException("El carrito está vacío, no se puede crear el pedido");
     }
 
-    // 3. Construir detalles y calcular total
     List<DetallePedidoModel> detalles = new ArrayList<>();
     BigDecimal total = BigDecimal.ZERO;
 
@@ -165,7 +161,6 @@ public class PedidoService {
         BigDecimal precioUnitario = new BigDecimal(item.get("precioUnitario").asText());
         BigDecimal subtotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
 
-        // 4. Registrar salida en inventario
         registrarSalidaInventario(productoId, cantidad);
 
         DetallePedidoModel detalle = new DetallePedidoModel();
@@ -182,29 +177,23 @@ public class PedidoService {
     pedido.setTotal(total);
     pedido.setDetalles(detalles);
 
-    // 5. Procesar pago antes de guardar el pedido
-    procesarPago(pedidoDTO.getUsuarioId(), total, pedidoDTO.getMetodoPago());
-
-    // 6. Guardar pedido
     PedidoModel guardado = pedidoRepository.save(pedido);
     log.info("Pedido creado con id: {} por un total de: {}", guardado.getId(), total);
 
-    // 7. Crear envío
-    crearEnvio(guardado.getId(), pedidoDTO.getDireccionEntrega());
-
-    // 8. Vaciar carrito
+    procesarPago(guardado.getId(), pedidoDTO.getUsuarioId(), total, pedidoDTO.getMetodoPago());
+    crearEnvio(guardado.getId(), pedidoDTO.getUsuarioId(), pedidoDTO.getDireccionEntrega());
     vaciarCarrito(pedidoDTO.getUsuarioId());
 
     return guardado;
+
     }
 
-    // Llama a ms-pagos para procesar el pago
-    private void procesarPago(Long usuarioId, BigDecimal monto, String metodoPago) {
+    private void procesarPago(Long pedidoId, Long usuarioId, BigDecimal monto, String metodoPago) {
         try {
             log.info("Procesando pago de {} para usuario {} via {}", monto, usuarioId, metodoPago);
             String body = String.format(
-                "{\"usuarioId\":%d,\"monto\":%s,\"metodoPago\":\"%s\"}",
-                usuarioId, monto.toPlainString(), metodoPago
+                "{\"pedidoId\":%d,\"usuarioId\":%d,\"monto\":%s,\"metodoPago\":\"%s\"}",
+                pedidoId, usuarioId, monto.toPlainString(), metodoPago
             );
             webClientPagos.post()
                     .uri("/api/pagos")
@@ -221,13 +210,14 @@ public class PedidoService {
     }
 
 
-    private void crearEnvio(Long pedidoId, String direccion) {
-        try {
-            log.info("Creando envío para pedido id: {}", pedidoId);
-            String body = String.format(
-                "{\"pedidoId\":%d,\"direccion\":\"%s\"}",
-                pedidoId, direccion
+    private void crearEnvio(Long pedidoId, Long usuarioId, String direccion) {
+    try {
+        log.info("Creando envío para pedido id: {}", pedidoId);
+        String body = String.format(
+            "{\"pedidoId\":%d,\"usuarioId\":%d,\"direccion\":\"%s\",\"ciudad\":\"Santiago\"}",
+            pedidoId, usuarioId, direccion
             );
+            
             webClientEnvios.post()
                     .uri("/api/envios")
                     .header("Content-Type", "application/json")
