@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "inventarios")
+@Table(name = "inventario")
 @Data
 
 public class InventarioModel {
