@@ -218,7 +218,7 @@ services:
 
   ms-resenas:
     build:
-      context: ./ms_reseñas/ms_reseñas
+      context: ./ms_resenas/ms_resenas
     container_name: ms-resenas
     restart: always
     depends_on:
