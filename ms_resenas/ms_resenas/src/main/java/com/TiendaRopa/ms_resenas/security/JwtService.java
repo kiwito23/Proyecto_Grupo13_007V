@@ -5,22 +5,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
-=======
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
 
 @Service
 public class JwtService {
 
-<<<<<<< HEAD
-    private static final String SECRET_KEY = "586E3272357538782F413F4428472B4B6250655368566D597133743677397A24";
+    private static final String SECRET_KEY = "Cl0th1ngSt0r3S2cr3tK3yF0rJWT";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -34,33 +27,10 @@ public class JwtService {
     public boolean isTokenValid(String token) {
         try {
             return !isTokenExpired(token);
-=======
-    private static final String SECRET_KEY = "TIENDA_ROPA_CLAVE_SECRETA_123456789";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
-
-    private SecretKey getKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public String obtenerUsername(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.getSubject();
-    }
-
-    public boolean tokenValido(String token) {
-        try {
-            obtenerUsername(token);
-            return true;
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
         } catch (Exception e) {
             return false;
         }
     }
-<<<<<<< HEAD
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
@@ -82,6 +52,4 @@ public class JwtService {
         byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-=======
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
 }

@@ -12,7 +12,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "TIENDA_ROPA_CLAVE_SECRETA_123456789";
+    private static final String SECRET_KEY = "Cl0th1ngSt0r3S2cr3tK3yF0rJWT";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hora
 
     private SecretKey getKey() {

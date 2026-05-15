@@ -47,13 +47,8 @@ services:
 
   ms-categorias:
     build:
-<<<<<<< HEAD
-      context: ./ms_categorias
-    container_name: ms-categorias/me_categorias
-=======
       context: ./ms_categorias/ms_categorias
     container_name: ms-categorias
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
     restart: always
     depends_on:
       - mysql-categorias
@@ -208,11 +203,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: root123
       MS_CATEGORIAS_URL: http://ms-categorias:8082
 
-<<<<<<< HEAD
   # --- MS_RESEÑAS (silvia) ---
-=======
-  # --- MS_RESENAS (silvia) ---
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
   mysql-resenas:
     image: mysql:8.0
     container_name: mysql-resenas
