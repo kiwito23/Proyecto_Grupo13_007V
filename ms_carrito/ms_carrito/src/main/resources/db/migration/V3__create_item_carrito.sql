@@ -6,6 +6,5 @@ CREATE TABLE IF NOT EXISTS item_carrito (
     precio_unitario DECIMAL(10,2) NOT NULL,
     talla_id BIGINT NOT NULL,
     CONSTRAINT fk_item_carrito FOREIGN KEY (carrito_id) REFERENCES carrito(id),
-    CONSTRAINT uq_carrito_producto UNIQUE (carrito_id, producto_id),
-    CONSTRAINT fk_item_carrito_talla FOREIGN KEY (talla_id) REFERENCES talla(id)
+    CONSTRAINT uq_carrito_producto UNIQUE (carrito_id, producto_id)
 );
