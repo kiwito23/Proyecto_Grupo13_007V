@@ -1,4 +1,4 @@
-package com.TiendaRopa.ms_envios.Controller;
+package com.TiendaRopa.ms_envios.controller;
 
 import com.TiendaRopa.ms_envios.dto.EnvioDTO;
 import com.TiendaRopa.ms_envios.Model.EnvioModel;
