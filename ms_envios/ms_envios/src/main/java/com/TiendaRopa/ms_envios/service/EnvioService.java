@@ -40,10 +40,7 @@ public class EnvioService {
         return envioRepository.findByPedidoId(pedidoId);
     }
 
-<<<<<<< HEAD
     public EnvioModel crear(EnvioDTO dto) {
-=======
-    public Envio crear(EnvioDTO dto) {
         log.info("Verificando pedido {} en ms-pedidos", dto.getPedidoId());
         try {
             webClientPedidos.get()
@@ -57,7 +54,6 @@ public class EnvioService {
             throw new RuntimeException("El pedido con id " + dto.getPedidoId() + " no existe");
         }
 
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
         log.info("Creando envio para pedido: {}", dto.getPedidoId());
         EnvioModel envio = new EnvioModel();
         envio.setPedidoId(dto.getPedidoId());
