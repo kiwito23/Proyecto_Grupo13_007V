@@ -1,6 +1,7 @@
 package com.TiendaRopa.ms_envios.service;
 
 import com.TiendaRopa.ms_envios.dto.EnvioDTO;
+import com.TiendaRopa.ms_envios.exceptions.EnvioNotFoundException;
 import com.TiendaRopa.ms_envios.Model.EnvioModel;
 import com.TiendaRopa.ms_envios.repository.EnvioRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class EnvioService {
     public EnvioModel obtenerPorId(Long id) {
         log.info("Buscando envio con id: {}", id);
         return envioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Envio no encontrado con id: " + id));
+                .orElseThrow(() -> new EnvioNotFoundException("Envio no encontrado con id: " + id));
     }
 
     public List<EnvioModel> obtenerPorUsuario(Long usuarioId) {
