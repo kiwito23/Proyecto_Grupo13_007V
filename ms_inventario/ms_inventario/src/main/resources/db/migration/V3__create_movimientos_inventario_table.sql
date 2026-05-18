@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS movimiento_inventario (
+CREATE TABLE IF NOT EXISTS movimientos_inventario (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     inventario_id BIGINT NOT NULL,
     tipo_movimiento ENUM('ENTRADA', 'SALIDA') NOT NULL,

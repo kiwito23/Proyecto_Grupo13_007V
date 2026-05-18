@@ -1,7 +1,7 @@
 package com.TiendaRopa.ms_envios.exceptions;
 
-public class NotFoundException extends RuntimeException {
-    public NotFoundException(String message) {
+public class EnvioNotFoundException extends RuntimeException {
+    public EnvioNotFoundException(String message) {
         super(message);
     }
 }

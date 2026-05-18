@@ -40,6 +40,19 @@ public class EnvioService {
     }
 
     public EnvioModel crear(EnvioDTO dto) {
+        log.info("Verificando pedido {} en ms-pedidos", dto.getPedidoId());
+        try {
+            webClientPedidos.get()
+                    .uri("/api/pedidos/{id}", dto.getPedidoId())
+                    .retrieve()
+                    .bodyToMono(Object.class)
+                    .block();
+            log.info("Pedido {} verificado correctamente", dto.getPedidoId());
+        } catch (Exception e) {
+            log.error("Pedido no encontrado con id: {}", dto.getPedidoId());
+            throw new RuntimeException("El pedido con id " + dto.getPedidoId() + " no existe");
+        }
+
         log.info("Creando envio para pedido: {}", dto.getPedidoId());
         EnvioModel envio = new EnvioModel();
         envio.setPedidoId(dto.getPedidoId());

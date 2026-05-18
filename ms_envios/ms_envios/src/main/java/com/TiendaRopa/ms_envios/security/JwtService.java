@@ -28,10 +28,20 @@ public class JwtService {
         return claims.getSubject();
     }
 
+    public boolean tokenExpirado(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        Date expiracion = new Date(claims.getIssuedAt().getTime() + EXPIRATION_TIME);
+        return expiracion.before(new Date());
+    }
+
     public boolean tokenValido(String token) {
         try {
             obtenerUsername(token);
-            return true;
+            return !tokenExpirado(token);
         } catch (Exception e) {
             return false;
         }

@@ -1,9 +1,6 @@
 package com.TiendaRopa.ms_resenas.exception;
 
-<<<<<<< HEAD
-=======
 import jakarta.servlet.http.HttpServletRequest;
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,10 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-<<<<<<< HEAD
-=======
 import java.time.LocalDateTime;
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,24 +16,6 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-<<<<<<< HEAD
-    public ResponseEntity<Map<String, String>> handleValidationErrors(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errores = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String campo = ((FieldError) error).getField();
-            String mensaje = error.getDefaultMessage();
-            errores.put(campo, mensaje);
-        });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-=======
     public ResponseEntity<Map<String, Object>> handleValidation(
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
@@ -94,6 +70,5 @@ public class GlobalExceptionHandler {
         errorResponse.put("message", "Error interno del servidor");
         errorResponse.put("path", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
     }
 }
