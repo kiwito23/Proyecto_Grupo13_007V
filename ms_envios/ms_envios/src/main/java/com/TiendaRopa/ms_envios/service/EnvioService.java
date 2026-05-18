@@ -7,6 +7,7 @@ import com.TiendaRopa.ms_envios.repository.EnvioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class EnvioService {
 
     private final EnvioRepository envioRepository;
-
+    private final WebClient webClientPedidos;
     public List<EnvioModel> obtenerTodos() {
         log.info("Obteniendo todos los envios");
         return envioRepository.findAll();
