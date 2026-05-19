@@ -12,7 +12,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "TIENDA_ROPA_CLAVE_SECRETA_123456789";
+    private static final String SECRET_KEY = "Cl0th1ngSt0r3S2cr3tK3yF0rJWT";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     private SecretKey getKey() {
@@ -28,10 +28,20 @@ public class JwtService {
         return claims.getSubject();
     }
 
+    public boolean tokenExpirado(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        Date expiracion = new Date(claims.getIssuedAt().getTime() + EXPIRATION_TIME);
+        return expiracion.before(new Date());
+    }
+
     public boolean tokenValido(String token) {
         try {
             obtenerUsername(token);
-            return true;
+            return !tokenExpirado(token);
         } catch (Exception e) {
             return false;
         }

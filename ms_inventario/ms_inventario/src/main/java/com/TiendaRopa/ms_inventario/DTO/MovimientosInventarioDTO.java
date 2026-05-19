@@ -4,12 +4,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 public class MovimientosInventarioDTO {
-
-    @NotNull (message = "El ID del inventario no puede ser nulo")
-    private Long inventarioId;
 
     @NotNull(message = "El tipo de movimiento es obligatorio")
     private String tipoMovimiento; // "entrada" o "salida"
@@ -22,6 +20,6 @@ public class MovimientosInventarioDTO {
     private String motivo;
 
     @NotBlank (message = "La fecha del movimiento es obligatoria")
-    private String fechaMovimiento;
+    private LocalDateTime fechaMovimiento;
 
 }

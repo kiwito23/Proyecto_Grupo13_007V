@@ -59,7 +59,7 @@ public class PedidoService {
             throw new PedidoNotFoundException("Estado inválido: " + dto.getEstado());
         }
 
-        // Regla de negocio: no se puede cambiar estado de un pedido ENTREGADO o CANCELADO
+        
         if (pedido.getEstado() == PedidoModel.EstadoPedido.ENTREGADO ||
             pedido.getEstado() == PedidoModel.EstadoPedido.CANCELADO) {
             throw new PedidoNotFoundException("No se puede modificar un pedido " + pedido.getEstado());
@@ -70,7 +70,6 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    // Llama a ms-usuarios para validar que existe
     private void validarUsuarioExiste(Long usuarioId) {
         try {
             webClientUsuarios.get()
@@ -85,7 +84,6 @@ public class PedidoService {
         }
     }
 
-    // Llama a ms-carrito para obtener los items
     private List<JsonNode> obtenerItemsCarrito(Long usuarioId) {
         try {
             log.info("Obteniendo items del carrito del usuario {}", usuarioId);
@@ -101,7 +99,6 @@ public class PedidoService {
         }
     }
 
-    // Llama a ms-inventario para registrar la salida de stock
     private void registrarSalidaInventario(Long productoId, Integer cantidad) {
         try {
             log.info("Registrando salida de {} unidades del producto {}", cantidad, productoId);

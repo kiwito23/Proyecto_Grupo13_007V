@@ -33,9 +33,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(EnvioNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(
-            NotFoundException ex,
+            EnvioNotFoundException ex,
             HttpServletRequest request) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("timestamp", LocalDateTime.now());

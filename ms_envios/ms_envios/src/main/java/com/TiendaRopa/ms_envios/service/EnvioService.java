@@ -1,6 +1,7 @@
 package com.TiendaRopa.ms_envios.service;
 
 import com.TiendaRopa.ms_envios.dto.EnvioDTO;
+import com.TiendaRopa.ms_envios.exceptions.EnvioNotFoundException;
 import com.TiendaRopa.ms_envios.Model.EnvioModel;
 import com.TiendaRopa.ms_envios.repository.EnvioRepository;
 import lombok.RequiredArgsConstructor;
