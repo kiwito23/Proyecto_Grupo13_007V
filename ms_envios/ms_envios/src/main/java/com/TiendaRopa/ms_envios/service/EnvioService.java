@@ -9,15 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EnvioService {
 
-    private final EnvioRepository envioRepository;
-    private final WebClient webClientPedidos;
+private final EnvioRepository envioRepository;
+private final WebClient webClientPedidos;
 
     public List<EnvioModel> obtenerTodos() {
         log.info("Obteniendo todos los envios");
@@ -27,7 +26,7 @@ public class EnvioService {
     public EnvioModel obtenerPorId(Long id) {
         log.info("Buscando envio con id: {}", id);
         return envioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Envio no encontrado con id: " + id));
+                .orElseThrow(() -> new EnvioNotFoundException("Envio no encontrado con id: " + id));
     }
 
     public List<EnvioModel> obtenerPorUsuario(Long usuarioId) {
@@ -40,10 +39,7 @@ public class EnvioService {
         return envioRepository.findByPedidoId(pedidoId);
     }
 
-<<<<<<< HEAD
     public EnvioModel crear(EnvioDTO dto) {
-=======
-    public Envio crear(EnvioDTO dto) {
         log.info("Verificando pedido {} en ms-pedidos", dto.getPedidoId());
         try {
             webClientPedidos.get()
@@ -57,7 +53,6 @@ public class EnvioService {
             throw new RuntimeException("El pedido con id " + dto.getPedidoId() + " no existe");
         }
 
->>>>>>> af1da5c994e75b0f34c840d04b10e488a70dfdfa
         log.info("Creando envio para pedido: {}", dto.getPedidoId());
         EnvioModel envio = new EnvioModel();
         envio.setPedidoId(dto.getPedidoId());
@@ -77,7 +72,8 @@ public class EnvioService {
 
     public void eliminar(Long id) {
         log.info("Eliminando envio con id: {}", id);
-        obtenerPorId(id);
-        envioRepository.deleteById(id);
+        EnvioModel envio = obtenerPorId(id);
+        envioRepository.delete(envio);
     }
+
 }
