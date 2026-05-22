@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EnvioService {
 
-    private final EnvioRepository envioRepository;
-    private final WebClient webClientPedidos;
+private final EnvioRepository envioRepository;
+private final WebClient webClientPedidos;
+
     public List<EnvioModel> obtenerTodos() {
         log.info("Obteniendo todos los envios");
         return envioRepository.findAll();
@@ -75,5 +75,6 @@ public class EnvioService {
         log.info("Eliminando envio con id: {}", id);
         EnvioModel envio = obtenerPorId(id);
         envioRepository.delete(envio);
-}
+    }
+
 }
