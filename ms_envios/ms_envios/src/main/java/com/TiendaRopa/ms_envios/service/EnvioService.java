@@ -60,7 +60,7 @@ private final WebClient webClientPedidos;
         envio.setUsuarioId(dto.getUsuarioId());
         envio.setDireccion(dto.getDireccion());
         envio.setCiudad(dto.getCiudad());
-        envio.setNumeroSeguimiento(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        envio.setNumeroSeguimiento(dto.getNumeroSeguimiento());
         return envioRepository.save(envio);
     }
 
