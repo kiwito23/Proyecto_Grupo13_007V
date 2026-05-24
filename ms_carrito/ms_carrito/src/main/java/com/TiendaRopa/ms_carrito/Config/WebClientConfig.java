@@ -18,6 +18,11 @@ public class WebClientConfig {
     private String msTallasUrl;
 
     @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
     public WebClient webClientUsuarios(WebClient.Builder builder) {
         return builder.baseUrl(msUsuariosUrl).build();
     }

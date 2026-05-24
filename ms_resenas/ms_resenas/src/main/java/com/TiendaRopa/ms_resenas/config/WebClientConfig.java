@@ -12,6 +12,11 @@ public class WebClientConfig {
     private String msProductosUrl;
 
     @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
     public WebClient webClientProductos(WebClient.Builder builder) {
         return builder.baseUrl(msProductosUrl).build();
     }
