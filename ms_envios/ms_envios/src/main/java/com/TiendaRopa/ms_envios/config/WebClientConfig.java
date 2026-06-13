@@ -12,6 +12,11 @@ public class WebClientConfig {
     private String msPedidosUrl;
 
     @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
     public WebClient webClientPedidos(WebClient.Builder builder) {
         return builder.baseUrl(msPedidosUrl).build();
     }

@@ -17,4 +17,8 @@ public class EnvioDTO {
 
     @NotBlank(message = "La ciudad es obligatoria")
     private String ciudad;
+
+    public String getNumeroSeguimiento() {
+        return "ENVIO-" + pedidoId + "-" + usuarioId;
+    }
 }

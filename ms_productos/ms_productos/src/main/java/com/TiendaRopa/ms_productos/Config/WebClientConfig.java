@@ -12,6 +12,11 @@ public class WebClientConfig {
     private String msCategoriasUrl;
 
     @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
     public WebClient webClientCategorias(WebClient.Builder builder) {
         return builder.baseUrl(msCategoriasUrl).build();
     }
