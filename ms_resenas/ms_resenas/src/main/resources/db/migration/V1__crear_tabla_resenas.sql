@@ -5,4 +5,5 @@ CREATE TABLE IF NOT EXISTS resenas (
     calificacion INT NOT NULL,
     comentario VARCHAR(500) NOT NULL,
     estado VARCHAR(50) NOT NULL DEFAULT 'ACTIVO'
+    ALTER TABLE resenas ADD COLUMN recomendado BOOLEAN NOT NULL DEFAULT FALSE;
 );

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
+import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 @Service
@@ -73,5 +73,10 @@ public class ResenaService {
         log.info("Eliminando resena con id: {}", id);
         obtenerPorId(id);
         resenaRepository.deleteById(id);
+    }
+
+    public List<Resena> obtenerRecomendadas(Boolean recomendado) {
+    log.info("Obteniendo 5 resenas con recomendado: {}", recomendado);
+    return resenaRepository.findTop5ByRecomendado(recomendado, PageRequest.of(0, 5));
     }
 }

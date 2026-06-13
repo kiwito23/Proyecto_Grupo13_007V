@@ -31,4 +31,7 @@ public class Resena {
 
     @Column(nullable = false)
     private String estado = "ACTIVO";
+
+    @Column(nullable = false)
+    private Boolean recomendado = false;
 }

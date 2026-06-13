@@ -54,4 +54,10 @@ public class ResenaController {
         resenaService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/recomendadas")
+    public ResponseEntity<List<Resena>> obtenerRecomendadas(
+        @RequestParam(defaultValue = "true") Boolean recomendado) {
+    return ResponseEntity.ok(resenaService.obtenerRecomendadas(recomendado));
+    }
 }

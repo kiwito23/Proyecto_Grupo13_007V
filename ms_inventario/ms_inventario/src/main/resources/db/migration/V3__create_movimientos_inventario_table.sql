@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS movimientos_inventario (
     tipo_movimiento ENUM('ENTRADA', 'SALIDA') NOT NULL,
     cantidad INT NOT NULL,
     motivo VARCHAR(255),
-    fecha DATETIME NOT NULL,
+    fecha_movimiento DATETIME NOT NULL,
     CONSTRAINT fk_movimiento_inventario FOREIGN KEY (inventario_id) REFERENCES inventario(id)
 );

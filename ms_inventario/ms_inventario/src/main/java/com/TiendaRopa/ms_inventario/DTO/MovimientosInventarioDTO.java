@@ -19,7 +19,7 @@ public class MovimientosInventarioDTO {
     @NotBlank (message = "El motivo del movimiento es obligatorio")
     private String motivo;
 
-    @NotBlank (message = "La fecha del movimiento es obligatoria")
+    @NotNull(message = "La fecha del movimiento es obligatoria")
     private LocalDateTime fechaMovimiento;
 
 }
