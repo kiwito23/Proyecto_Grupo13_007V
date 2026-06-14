@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ms-categorias
+          uri: http://ms-categorias:8082
+          predicates:
+            - Path=/api/categorias/**
+
+        - id: ms-tallas
+          uri: http://ms-tallas:8089
+          predicates:
+            - Path=/api/tallas/**
+
+        - id: ms-resenas
+          uri: http://ms-resenas:8088
+          predicates:
+            - Path=/api/resenas/**
+
+        - id: ms-envios
+          uri: http://ms-envios:8083
+          predicates:
+            - Path=/api/envios/**
+
+        - id: ms-pagos
+          uri: http://ms-pagos:8085
+          predicates:
+            - Path=/api/pagos/**
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

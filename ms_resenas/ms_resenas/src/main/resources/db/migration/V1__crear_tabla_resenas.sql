@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS resenas (
     producto_id BIGINT NOT NULL,
     calificacion INT NOT NULL,
     comentario VARCHAR(500) NOT NULL,
-    estado VARCHAR(50) NOT NULL DEFAULT 'ACTIVO'
-    ALTER TABLE resenas ADD COLUMN recomendado BOOLEAN NOT NULL DEFAULT FALSE;
+    estado VARCHAR(50) NOT NULL DEFAULT 'ACTIVO',
+    recomendado BOOLEAN NOT NULL DEFAULT FALSE
 );
