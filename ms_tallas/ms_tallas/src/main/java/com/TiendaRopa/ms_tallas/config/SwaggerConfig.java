@@ -1,4 +1,4 @@
-package com.TiendaRopa.ms_categorias.config;
+package com.TiendaRopa.ms_tallas.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,9 +15,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Tienda Ropa - Categorias")
+                        .title("API Tienda Ropa - Tallas")
                         .version("1.0")
-                        .description("Documentación de la API para el microservicio de categorias"))
+                        .description("Documentación de la API para el microservicio de tallas"))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components()
                         .addSecuritySchemes("Bearer Authentication",

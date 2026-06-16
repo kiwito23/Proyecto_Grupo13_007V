@@ -22,6 +22,7 @@ Sistema de tienda de ropa desarrollado con arquitectura de microservicios usando
 | ms-productos | 8087 | Katerine | Gestión de productos |
 | ms-usuarios | 8090 | Katerine | Gestión de usuarios |
 | api-gateway | 8080 | Silvia | Gateway principal |
+| eureka-server | 8761 | Silvia | Servidor de descubrimiento de servicios |
 
 ## 🌐 Rutas del API Gateway
 
@@ -32,6 +33,10 @@ Sistema de tienda de ropa desarrollado con arquitectura de microservicios usando
 | `/api/resenas/**` | ms-resenas:8088 |
 | `/api/envios/**` | ms-envios:8083 |
 | `/api/pagos/**` | ms-pagos:8085 |
+
+## 🔍 Eureka Server
+Panel de Eureka disponible en:
+http://localhost:8761 
 
 ## 📚 Documentación Swagger
 

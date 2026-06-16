@@ -285,6 +285,15 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
 
+      # --- EUREKA SERVER ---
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    restart: always
+    ports:
+      - "8761:8761"
+
   # --- API GATEWAY ---
   api-gateway:
     build:
