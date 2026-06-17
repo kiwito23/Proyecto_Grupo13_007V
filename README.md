@@ -65,6 +65,13 @@ docker-compose up --build
 ```bash
 cd ms-categorias/ms-categorias
 .\mvnw test
+### Base de datos para pruebas
+Las pruebas unitarias usan **H2** (base de datos en memoria) configurada en `application-test.properties`, separada de MySQL de producción.
+
+| Entorno | Base de datos | Configuración |
+|---|---|---|
+| Docker/Producción | MySQL 8.0 | application.yml |
+| Pruebas unitarias | H2 en memoria | application-test.properties |
 ```
 
 ## 🛠️ Stack Tecnológico
