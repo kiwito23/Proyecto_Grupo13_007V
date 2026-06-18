@@ -28,4 +28,5 @@ public class ItemCarritoModel {
 
     @Column(name = "talla_id", nullable = false)
     private Long tallaId;
+
 }

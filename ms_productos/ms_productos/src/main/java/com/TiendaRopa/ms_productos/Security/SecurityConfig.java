@@ -23,7 +23,11 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Ver productos es público, modificar requiere token
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET,
                                 "/api/productos", "/api/productos/**").permitAll()
                         .anyRequest().authenticated()

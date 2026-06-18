@@ -1,0 +1,84 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ms-carrito
+          uri: http://ms-carrito:8081
+          predicates:
+            - Path=/api/carrito/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-categorias
+          uri: http://ms-categorias:8082
+          predicates:
+            - Path=/api/categorias/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-envios
+          uri: http://ms-envios:8083
+          predicates:
+            - Path=/api/envios/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-inventario
+          uri: http://ms-inventario:8084
+          predicates:
+            - Path=/api/inventario/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-pagos
+          uri: http://ms-pagos:8085
+          predicates:
+            - Path=/api/pagos/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-pedidos
+          uri: http://ms-pedidos:8086
+          predicates:
+            - Path=/api/pedidos/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-productos
+          uri: http://ms-productos:8087
+          predicates:
+            - Path=/api/productos/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-resenas
+          uri: http://ms-resenas:8088
+          predicates:
+            - Path=/api/resenas/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-tallas
+          uri: http://ms-tallas:8089
+          predicates:
+            - Path=/api/tallas/**
+          filters:
+            - StripPrefix=0
+
+        - id: ms-usuarios
+          uri: http://ms-usuarios:8090
+          predicates:
+            - Path=/api/usuarios/**,/auth/**
+          filters:
+            - StripPrefix=0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,health

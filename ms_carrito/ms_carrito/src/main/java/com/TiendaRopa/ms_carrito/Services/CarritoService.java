@@ -69,6 +69,21 @@ public class CarritoService {
         return carritoRepository.findById(carrito.getId()).orElseThrow();
     }
 
+    
+    
+
+    public CarritoModel ofertaCarrito(Long usuarioId, Long productoId) {
+        log.info("Marcando producto {} como oferta en el carrito del usuario {}", productoId, usuarioId);
+        CarritoModel carrito = obtenerOCrearCarrito(usuarioId);
+        carrito.setOfertaCarrito(true);
+        carritoRepository.save(carrito);
+        log.info("Producto {} marcado como oferta en el carrito", productoId);
+        return carritoRepository.findById(carrito.getId()).orElseThrow();
+    }
+
+
+
+
     public List<ItemCarritoModel> obtenerItems(Long usuarioId) {
         log.info("Obteniendo items del carrito del usuario id: {}", usuarioId);
         CarritoModel carrito = obtenerOCrearCarrito(usuarioId);

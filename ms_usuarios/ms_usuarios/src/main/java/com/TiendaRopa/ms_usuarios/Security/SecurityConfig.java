@@ -22,10 +22,13 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos — no requieren token
-                        .requestMatchers("/auth/login", "/auth/**").permitAll()
-                        .requestMatchers("/api/usuarios").permitAll() // permitir registro
-                        // Todo lo demás requiere token
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/api/usuarios").permitAll() 
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
