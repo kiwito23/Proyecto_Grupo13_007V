@@ -67,14 +67,17 @@ Cada microservicio expone su documentación interactiva. Para acceder a endpoint
 Todos los endpoints (excepto `/auth/login` y GET de productos) requieren token JWT.
 
 **Obtener token:**
-
+```bash
 POST http://localhost:8090/auth/login
 Content-Type: application/json
+```
 
+```bash
 {
   "email": "admin68@TiendaRopa.cl",
   "contrasena": "SilvKat68"
 }
+```
 
 Usar el token retornado como 'Bearer Token' en el header 'Authorization'.
 
@@ -86,20 +89,26 @@ Usar el token retornado como 'Bearer Token' en el header 'Authorization'.
 - Maven
 
 ### Ejecución local con Docker
+```bash
 cd Proyecto_Grupo13_007V
 docker-compose up --build
+```
 
 
 ### Verificar que todos los servicios estén corriendo
+```bash
 docker ps
+```
 
 Deben aparecer 22 contenedores: 
 10 microservicios + 10 bases de datos MySQL + api-gateway + eureka-server.
 
 ### Ejecución de pruebas unitarias
 # Desde la raíz de cualquier microservicio
+```bash
 cd ms_categorias/ms_categorias
 .\mvnw test
+```
 
 
 ### Base de datos para pruebas
