@@ -67,10 +67,13 @@ Cada microservicio expone su documentación interactiva. Para acceder a endpoint
 Todos los endpoints (excepto `/auth/login` y GET de productos) requieren token JWT.
 
 **Obtener token:**
+
+POST 
 ```bash
-POST http://localhost:8090/auth/login
-Content-Type: application/json
+http://localhost:8090/auth/login
 ```
+Content-Type: application/json
+
 
 ```bash
 {
@@ -91,6 +94,8 @@ Usar el token retornado como 'Bearer Token' en el header 'Authorization'.
 ### Ejecución local con Docker
 ```bash
 cd Proyecto_Grupo13_007V
+```
+```bash
 docker-compose up --build
 ```
 
