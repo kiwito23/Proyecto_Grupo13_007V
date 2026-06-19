@@ -108,8 +108,8 @@ docker ps
 Deben aparecer 22 contenedores: 
 10 microservicios + 10 bases de datos MySQL + api-gateway + eureka-server.
 
-### Ejecución de pruebas unitarias
-# Desde la raíz de cualquier microservicio
+## Ejecución de pruebas unitarias
+### Desde la raíz de cualquier microservicio
 ```bash
 cd ms_categorias/ms_categorias
 .\mvnw test
