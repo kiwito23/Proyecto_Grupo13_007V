@@ -295,82 +295,80 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
 
+  # --- EUREKA SERVER ---
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    restart: always
+    ports:
+      - "8761:8761"
 
-# --- EUREKA SERVER ---
-eureka-server:
-  build: 
-  context: ./eureka-server
-  container_name: eureka-server
-  restart: always
-  ports:
-  - "8761:8761"
+  # --- API GATEWAY ---
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ms-carrito
+      - ms-categorias
+      - ms-envios
+      - ms-inventario
+      - ms-pagos
+      - ms-pedidos
+      - ms-productos
+      - ms-resenas
+      - ms-tallas
+      - ms-usuarios
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
 
-# --- API GATEWAY ---
-api-gateway:
-  build:
-    context: ./api-gateway
-  container_name: api-gateway
-  restart: always
-  ports:
-    - "8080:8080"
-  depends_on:
-    - ms-carrito
-    - ms-categorias
-    - ms-envios
-    - ms-inventario
-    - ms-pagos
-    - ms-pedidos
-    - ms-productos
-    - ms-resenas
-    - ms-tallas
-    - ms-usuarios
+      SPRING_CLOUD_GATEWAY_ROUTES_0_ID: ms-carrito
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://ms-carrito:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/carrito/**
 
-  environment:
-    SPRING_PROFILES_ACTIVE: prod
-    
-    SPRING_CLOUD_GATEWAY_ROUTES_0_ID: ms-carrito
-    SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://ms-carrito:8081
-    SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/carrito/**
+      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: ms-categorias
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://ms-categorias:8082
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/categorias/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_1_ID: ms-categorias
-    SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://ms-categorias:8082
-    SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/categorias/**
+      SPRING_CLOUD_GATEWAY_ROUTES_2_ID: ms-envios
+      SPRING_CLOUD_GATEWAY_ROUTES_2_URI: http://ms-envios:8083
+      SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: Path=/api/envios/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_2_ID: ms-envios
-    SPRING_CLOUD_GATEWAY_ROUTES_2_URI: http://ms-envios:8083
-    SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: Path=/api/envios/**
+      SPRING_CLOUD_GATEWAY_ROUTES_3_ID: ms-inventario
+      SPRING_CLOUD_GATEWAY_ROUTES_3_URI: http://ms-inventario:8084
+      SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: Path=/api/inventario/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_3_ID: ms-inventario
-    SPRING_CLOUD_GATEWAY_ROUTES_3_URI: http://ms-inventario:8084
-    SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: Path=/api/inventario/**
+      SPRING_CLOUD_GATEWAY_ROUTES_4_ID: ms-pagos
+      SPRING_CLOUD_GATEWAY_ROUTES_4_URI: http://ms-pagos:8085
+      SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: Path=/api/pagos/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_4_ID: ms-pagos
-    SPRING_CLOUD_GATEWAY_ROUTES_4_URI: http://ms-pagos:8085
-    SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: Path=/api/pagos/**
+      SPRING_CLOUD_GATEWAY_ROUTES_5_ID: ms-pedidos
+      SPRING_CLOUD_GATEWAY_ROUTES_5_URI: http://ms-pedidos:8086
+      SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0: Path=/api/pedidos/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_5_ID: ms-pedidos
-    SPRING_CLOUD_GATEWAY_ROUTES_5_URI: http://ms-pedidos:8086
-    SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0: Path=/api/pedidos/**
+      SPRING_CLOUD_GATEWAY_ROUTES_6_ID: ms-productos
+      SPRING_CLOUD_GATEWAY_ROUTES_6_URI: http://ms-productos:8087
+      SPRING_CLOUD_GATEWAY_ROUTES_6_PREDICATES_0: Path=/api/productos/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_6_ID: ms-productos
-    SPRING_CLOUD_GATEWAY_ROUTES_6_URI: http://ms-productos:8087
-    SPRING_CLOUD_GATEWAY_ROUTES_6_PREDICATES_0: Path=/api/productos/**
+      SPRING_CLOUD_GATEWAY_ROUTES_7_ID: ms-resenas
+      SPRING_CLOUD_GATEWAY_ROUTES_7_URI: http://ms-resenas:8088
+      SPRING_CLOUD_GATEWAY_ROUTES_7_PREDICATES_0: Path=/api/resenas/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_7_ID: ms-resenas
-    SPRING_CLOUD_GATEWAY_ROUTES_7_URI: http://ms-resenas:8088
-    SPRING_CLOUD_GATEWAY_ROUTES_7_PREDICATES_0: Path=/api/resenas/**
+      SPRING_CLOUD_GATEWAY_ROUTES_8_ID: ms-tallas
+      SPRING_CLOUD_GATEWAY_ROUTES_8_URI: http://ms-tallas:8089
+      SPRING_CLOUD_GATEWAY_ROUTES_8_PREDICATES_0: Path=/api/tallas/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_8_ID: ms-tallas
-    SPRING_CLOUD_GATEWAY_ROUTES_8_URI: http://ms-tallas:8089
-    SPRING_CLOUD_GATEWAY_ROUTES_8_PREDICATES_0: Path=/api/tallas/**
+      SPRING_CLOUD_GATEWAY_ROUTES_9_ID: ms-usuarios
+      SPRING_CLOUD_GATEWAY_ROUTES_9_URI: http://ms-usuarios:8090
+      SPRING_CLOUD_GATEWAY_ROUTES_9_PREDICATES_0: Path=/api/usuarios/**,/auth/**
 
-    SPRING_CLOUD_GATEWAY_ROUTES_9_ID: ms-usuarios
-    SPRING_CLOUD_GATEWAY_ROUTES_9_URI: http://ms-usuarios:8090
-    SPRING_CLOUD_GATEWAY_ROUTES_9_PREDICATES_0: Path=/api/usuarios/**,/auth/**
-
-    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: gateway,health
-
-    SPRING_CLOUD_GATEWAY_ROUTES_9_FILTERS_0: AddRequestHeader=X-Gateway-Origin,api-gateway
+      SPRING_CLOUD_GATEWAY_ROUTES_9_FILTERS_0: AddRequestHeader=X-Gateway-Origin,api-gateway
+      
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: gateway,health
 
 volumes:
   mysql_carrito_data:
@@ -383,5 +381,3 @@ volumes:
   mysql_resenas_data:
   mysql_tallas_data:
   mysql_usuarios_data:
-
-
