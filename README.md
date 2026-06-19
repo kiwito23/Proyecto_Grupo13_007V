@@ -112,6 +112,8 @@ Deben aparecer 22 contenedores:
 **Desde la raíz de cualquier microservicio**
 ```bash
 cd ms_categorias/ms_categorias
+```
+```bash
 .\mvnw test
 ```
 
