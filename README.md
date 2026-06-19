@@ -86,12 +86,12 @@ Usar el token retornado como 'Bearer Token' en el header 'Authorization'.
 
 ## 🚀 Instrucciones de Ejecución
 
-### Requisitos
+**Requisitos**
 - Docker Desktop instalado y corriendo
 - Java 17
 - Maven
 
-### Ejecución local con Docker
+**Ejecución local con Docker**
 ```bash
 cd Proyecto_Grupo13_007V
 ```
@@ -100,7 +100,7 @@ docker-compose up --build
 ```
 
 
-### Verificar que todos los servicios estén corriendo
+**Verificar que todos los servicios estén corriendo**
 ```bash
 docker ps
 ```
@@ -109,7 +109,7 @@ Deben aparecer 22 contenedores:
 10 microservicios + 10 bases de datos MySQL + api-gateway + eureka-server.
 
 ## Ejecución de pruebas unitarias
-### Desde la raíz de cualquier microservicio
+**Desde la raíz de cualquier microservicio**
 ```bash
 cd ms_categorias/ms_categorias
 .\mvnw test
