@@ -1,7 +1,7 @@
 # 🛍️ Tienda Ropa - Arquitectura de Microservicios
 
 ## 📋 Descripción
-Sistema de tienda de ropa desarrollado con arquitectura de microservicios usando Spring Boot, MySQL, Docker y JWT.
+Sistema de tienda de ropa desarrollado con arquitectura de microservicios usando Spring Boot, MySQL, Docker, JWT y Eureka.
 
 ## 👥 Integrantes
 - Silvia (Grupo 13)
@@ -60,19 +60,31 @@ http://localhost:8761
 cd Proyecto_Grupo13_007V
 docker-compose up --build
 ```
+### Perfiles de configuración
+Cada microservicio cuenta con 3 perfiles de configuración:
+
+- **dev** → Desarrollo local, conecta a MySQL en localhost
+- **docker** → Despliegue con Docker, conecta a MySQL en contenedor
+- **test** → Pruebas unitarias con H2 en memoria
+
+Para ejecutar con un perfil específico:
+```bash
+.\mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
 
 ### Ejecución de pruebas unitarias
 ```bash
 cd ms-categorias/ms-categorias
 .\mvnw test
-### Base de datos para pruebas
-Las pruebas unitarias usan **H2** (base de datos en memoria) configurada en `application-test.properties`, separada de MySQL de producción.
+
+```
+## 🗄️ Base de datos
 
 | Entorno | Base de datos | Configuración |
 |---|---|---|
-| Docker/Producción | MySQL 8.0 | application.yml |
+| Docker/Producción | MySQL 8.0 | application-docker.properties |
+| Desarrollo local | MySQL 8.0 | application-dev.properties |
 | Pruebas unitarias | H2 en memoria | application-test.properties |
-```
 
 ## 🛠️ Stack Tecnológico
 - **Backend:** Spring Boot 3.2.5
@@ -81,4 +93,6 @@ Las pruebas unitarias usan **H2** (base de datos en memoria) configurada en `app
 - **Seguridad:** JWT
 - **Migraciones:** Flyway
 - **Documentación:** Swagger/OpenAPI
-- **Testing:** JUnit 5 + Mockito
+- **Descubrimiento:** Eureka Server
+- **Gateway:** Spring Cloud Gateway
+- **Testing:** JUnit 5 + Mockito + H2

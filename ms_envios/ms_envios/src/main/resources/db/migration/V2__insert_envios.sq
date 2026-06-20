@@ -1,0 +1,4 @@
+INSERT INTO envios (pedido_id, usuario_id, direccion, ciudad, estado, numero_seguimiento) VALUES
+(1, 1, 'Av. Principal 123', 'Santiago', 'PREPARANDO', 'ENV00001'),
+(2, 2, 'Calle Secundaria 456', 'Valparaiso', 'ENVIADO', 'ENV00002'),
+(3, 3, 'Pasaje Los Pinos 789', 'Concepcion', 'ENTREGADO', 'ENV00003');
