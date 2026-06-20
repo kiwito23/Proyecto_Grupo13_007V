@@ -20,7 +20,6 @@ public class ItemCarritoDTO {
 
     @NotNull(message = "El ID de la talla es obligatorio")
     private Long tallaId;
-
-
+ 
 
 }

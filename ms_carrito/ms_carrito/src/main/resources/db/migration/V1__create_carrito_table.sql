@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS carrito (
     usuario_id BIGINT NOT NULL UNIQUE,
     fecha_creacion DATETIME NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE
+    oferta_carrito BOOLEAN NOT NULL DEFAULT FALSE
 );
 

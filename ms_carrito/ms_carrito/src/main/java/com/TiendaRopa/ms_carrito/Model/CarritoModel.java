@@ -23,6 +23,10 @@ public class CarritoModel {
     @Column(nullable = false)
     private Boolean activo = true;
 
+    @Column(nullable = false)
+    private boolean ofertaCarrito = true;
+
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCarritoModel> items;
+
 }

@@ -302,27 +302,13 @@ services:
   # --- API GATEWAY ---
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./api-gateway/api-gateway
     container_name: api-gateway
     restart: always
     ports:
       - "8080:8080"
     environment:
-      SPRING_CLOUD_GATEWAY_ROUTES_0_ID: ms-categorias
-      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://ms-categorias:8082
-      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/categorias/**
-      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: ms-tallas
-      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://ms-tallas:8089
-      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/tallas/**
-      SPRING_CLOUD_GATEWAY_ROUTES_2_ID: ms-resenas
-      SPRING_CLOUD_GATEWAY_ROUTES_2_URI: http://ms-resenas:8088
-      SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: Path=/api/resenas/**
-      SPRING_CLOUD_GATEWAY_ROUTES_3_ID: ms-envios
-      SPRING_CLOUD_GATEWAY_ROUTES_3_URI: http://ms-envios:8083
-      SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: Path=/api/envios/**
-      SPRING_CLOUD_GATEWAY_ROUTES_4_ID: ms-pagos
-      SPRING_CLOUD_GATEWAY_ROUTES_4_URI: http://ms-pagos:8085
-      SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: Path=/api/pagos/**
+      SPRING_PROFILES_ACTIVE: docker
 
 volumes:
   mysql_carrito_data:
