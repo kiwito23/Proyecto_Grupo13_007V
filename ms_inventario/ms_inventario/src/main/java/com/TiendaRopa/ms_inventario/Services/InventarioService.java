@@ -63,6 +63,12 @@ public class InventarioService {
     public InventarioModel registrarMovimiento(Long productoId, MovimientosInventarioDTO movimientoDTO) {
         log.info("Registrando movimiento de inventario para el producto ID: {}", productoId);
 
+        // Regla de negocio: la cantidad debe ser mayor a cero
+        if (movimientoDTO.getCantidad() == null || movimientoDTO.getCantidad() <= 0) {
+            log.error("Cantidad inválida en movimiento: {}", movimientoDTO.getCantidad());
+            throw new TipoMovimientoInvalidoException("La cantidad del movimiento debe ser mayor a cero");
+        }
+
         InventarioModel inventario = obtenerPorProductoId(productoId);
 
         MovimientosInventarioModel.TipoMovimiento tipoMovimiento;

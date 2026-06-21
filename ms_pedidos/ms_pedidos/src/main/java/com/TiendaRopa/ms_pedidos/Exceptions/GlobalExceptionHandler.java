@@ -55,6 +55,108 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(PedidoDuplicadoException.class)
+    public ResponseEntity<ErrorResponse> handlePedidoDuplicado(
+            PedidoDuplicadoException ex,
+            HttpServletRequest request) {
+
+        log.error("Pedido duplicado en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(EstadoInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleEstadoInvalido(
+            EstadoInvalidoException ex,
+            HttpServletRequest request) {
+
+        log.error("Estado inválido en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(UsuarioNoExisteException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioNoExiste(
+            UsuarioNoExisteException ex,
+            HttpServletRequest request) {
+
+        log.error("Usuario no existe en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(CarritoVacioException.class)
+    public ResponseEntity<ErrorResponse> handleCarritoVacio(
+            CarritoVacioException ex,
+            HttpServletRequest request) {
+
+        log.error("Carrito vacío en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(StockInsuficienteException.class)
+    public ResponseEntity<ErrorResponse> handleStockInsuficiente(
+            StockInsuficienteException ex,
+            HttpServletRequest request) {
+
+        log.error("Stock insuficiente en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(PagoFallidoException.class)
+    public ResponseEntity<ErrorResponse> handlePagoFallido(
+            PagoFallidoException ex,
+            HttpServletRequest request) {
+
+        log.error("Pago fallido en {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.PAYMENT_REQUIRED.value(),
+                "Payment Required",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(error);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(
             RuntimeException ex,

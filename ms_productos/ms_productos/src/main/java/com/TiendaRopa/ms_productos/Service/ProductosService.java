@@ -4,11 +4,14 @@ import com.TiendaRopa.ms_productos.DTO.ProductosDTO;
 import com.TiendaRopa.ms_productos.Model.ProductosModel;
 import com.TiendaRopa.ms_productos.Repositories.ProductoRepository;
 import com.TiendaRopa.ms_productos.Exceptions.ProductoNotFoundException;
+import com.TiendaRopa.ms_productos.Exceptions.CategoriaNotFoundException;
+import com.TiendaRopa.ms_productos.Exceptions.PrecioInvalidoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
+import java.math.BigDecimal;
 
 
 
@@ -42,6 +45,12 @@ public class ProductosService {
     public ProductosModel crearProducto(ProductosDTO productoDTO) {
         log.info("Creando producto: {}", productoDTO.getNombre());
 
+        // Regla de negocio: el precio debe ser mayor a cero
+        if (productoDTO.getPrecio() == null || productoDTO.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Precio inválido: {}", productoDTO.getPrecio());
+            throw new PrecioInvalidoException("El precio debe ser mayor a cero");
+        }
+
         // Valida que la categoría existe en ms-categorias
         validarCategoriaExiste(productoDTO.getCategoriaId());
 
@@ -60,6 +69,13 @@ public class ProductosService {
 
     public ProductosModel actualizarProducto(Long id, ProductosDTO productoDTO) {
         log.info("Actualizando producto con id: {}", id);
+        
+        // Regla de negocio: el precio debe ser mayor a cero
+        if (productoDTO.getPrecio() == null || productoDTO.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Precio inválido: {}", productoDTO.getPrecio());
+            throw new PrecioInvalidoException("El precio debe ser mayor a cero");
+        }
+
         validarCategoriaExiste(productoDTO.getCategoriaId());
 
         ProductosModel producto = obtenerProductosPorId(id);
@@ -95,7 +111,7 @@ public class ProductosService {
             log.info("Categoría id: {} validada correctamente", categoriaId);
         } catch (Exception e) {
             log.error("Categoría no encontrada en ms-categorias con id: {}", categoriaId);
-            throw new ProductoNotFoundException("La categoría con id " + categoriaId + " no existe");
+            throw new CategoriaNotFoundException("La categoría con id " + categoriaId + " no existe");
         }
     }
 

@@ -43,6 +43,12 @@ public class CarritoService {
         log.info("Agregando producto {} talla {} al carrito del usuario {}", 
                         itemCarritoDTO.getProductoId(), itemCarritoDTO.getTallaId(), usuarioId);
 
+        // Regla de negocio: la cantidad debe ser mayor a cero
+        if (itemCarritoDTO.getCantidad() == null || itemCarritoDTO.getCantidad() <= 0) {
+            log.error("Cantidad inválida: {}", itemCarritoDTO.getCantidad());
+            throw new CarritoNotFoundException("La cantidad debe ser mayor a cero");
+        }
+
         validarProductoExiste(itemCarritoDTO.getProductoId());
         validarTallaExiste(itemCarritoDTO.getTallaId());          // ← nuevo
 

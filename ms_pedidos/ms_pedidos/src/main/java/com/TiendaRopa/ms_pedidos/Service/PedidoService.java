@@ -1,6 +1,5 @@
 package com.TiendaRopa.ms_pedidos.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.TiendaRopa.ms_pedidos.DTO.EstadoDTO;
 import com.TiendaRopa.ms_pedidos.DTO.PedidoDTO;
 import com.TiendaRopa.ms_pedidos.Model.DetallePedidoModel;
@@ -9,6 +8,11 @@ import com.TiendaRopa.ms_pedidos.Repositories.PedidoRepository;
 import com.TiendaRopa.ms_pedidos.Exceptions.PedidoNotFoundException;
 import com.TiendaRopa.ms_pedidos.Exceptions.EstadoInvalidoException;
 import com.TiendaRopa.ms_pedidos.Exceptions.PedidoDuplicadoException;
+import com.TiendaRopa.ms_pedidos.Exceptions.UsuarioNoExisteException;
+import com.TiendaRopa.ms_pedidos.Exceptions.CarritoVacioException;
+import com.TiendaRopa.ms_pedidos.Exceptions.StockInsuficienteException;
+import com.TiendaRopa.ms_pedidos.Exceptions.PagoFallidoException;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -61,11 +65,26 @@ public class PedidoService {
             throw new EstadoInvalidoException("Estado inválido: " + dto.getEstado());
         }
 
-        
         if (pedido.getEstado() == PedidoModel.EstadoPedido.ENTREGADO ||
             pedido.getEstado() == PedidoModel.EstadoPedido.CANCELADO) {
             log.error("No se puede modificar un pedido en estado {}", pedido.getEstado());
             throw new PedidoDuplicadoException("No se puede modificar un pedido " + pedido.getEstado());
+        }
+
+        // Regla de negocio: no se permite retroceder en el flujo PENDIENTE -> CONFIRMADO -> ENVIADO -> ENTREGADO
+        if (nuevoEstado != PedidoModel.EstadoPedido.CANCELADO
+                && nuevoEstado.ordinal() <= pedido.getEstado().ordinal()
+                && nuevoEstado != pedido.getEstado()) {
+            log.error("Transición inválida: de {} a {}", pedido.getEstado(), nuevoEstado);
+            throw new EstadoInvalidoException(
+                "No se puede retroceder de " + pedido.getEstado() + " a " + nuevoEstado);
+        }
+
+        // Regla de negocio: solo se puede cancelar si no ha sido enviado
+        if (nuevoEstado == PedidoModel.EstadoPedido.CANCELADO
+                && pedido.getEstado() == PedidoModel.EstadoPedido.ENVIADO) {
+            log.error("No se puede cancelar un pedido ya enviado, id: {}", id);
+            throw new EstadoInvalidoException("No se puede cancelar un pedido que ya fue enviado");
         }
 
         pedido.setEstado(nuevoEstado);
@@ -83,7 +102,7 @@ public class PedidoService {
             log.info("Usuario {} validado", usuarioId);
         } catch (Exception e) {
             log.error("Usuario no encontrado: {}", usuarioId);
-            throw new PedidoNotFoundException("El usuario con id " + usuarioId + " no existe");
+            throw new UsuarioNoExisteException("El usuario con id " + usuarioId + " no existe");
         }
     }
 
@@ -98,7 +117,7 @@ public class PedidoService {
             return items != null ? List.of(items) : List.of();
         } catch (Exception e) {
             log.error("Error al obtener carrito del usuario {}: {}", usuarioId, e.getMessage());
-            throw new PedidoNotFoundException("Error al obtener el carrito del usuario");
+            throw new CarritoVacioException("Error al obtener el carrito del usuario");
         }
     }
 
@@ -118,7 +137,7 @@ public class PedidoService {
                     .block();
         } catch (Exception e) {
             log.error("Error al registrar salida de inventario para producto {}: {}", productoId, e.getMessage());
-            throw new PedidoNotFoundException("Stock insuficiente o error en inventario para producto id: " + productoId);
+            throw new StockInsuficienteException("Stock insuficiente o error en inventario para producto id: " + productoId);
         }
     }
 
@@ -143,7 +162,7 @@ public class PedidoService {
     List<JsonNode> items = obtenerItemsCarrito(pedidoDTO.getUsuarioId());
     if (items.isEmpty()) {
         log.warn("El carrito del usuario {} está vacío", pedidoDTO.getUsuarioId());
-        throw new PedidoNotFoundException("El carrito está vacío, no se puede crear el pedido");
+        throw new CarritoVacioException("El carrito está vacío, no se puede crear el pedido");
     }
 
     List<DetallePedidoModel> detalles = new ArrayList<>();
@@ -206,7 +225,7 @@ public class PedidoService {
             log.info("Pago procesado correctamente para usuario {}", usuarioId);
         } catch (Exception e) {
             log.error("Error al procesar pago para usuario {}: {}", usuarioId, e.getMessage());
-            throw new PedidoNotFoundException("Error al procesar el pago: " + e.getMessage());
+            throw new PagoFallidoException("Error al procesar el pago: " + e.getMessage());
         }
     }
 
@@ -229,7 +248,8 @@ public class PedidoService {
             log.info("Envío creado correctamente para pedido {}", pedidoId);
         } catch (Exception e) {
             log.warn("No se pudo crear el envío para pedido {}: {}", pedidoId, e.getMessage());
-            throw new PedidoNotFoundException("Error al crear el envío: " + e.getMessage());
+            // No lanzamos excepción aquí para no fallar todo el pedido si el envío falla
+            // Se puede manejar como un evento compensatorio o reintento posterior
         }
 
     }
