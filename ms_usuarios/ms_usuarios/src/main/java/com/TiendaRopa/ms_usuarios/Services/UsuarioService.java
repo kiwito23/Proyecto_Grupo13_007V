@@ -60,6 +60,14 @@ public class UsuarioService {
     public UsuarioModel actualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
         log.info("Actualizando usuario con ID: {}", id);
         UsuarioModel usuarioExistente = obtenerUsuarioPorId(id);
+
+        // Regla de negocio: si cambia el email, no puede pertenecer a otro usuario
+        boolean cambioEmail = !usuarioExistente.getEmail().equalsIgnoreCase(usuarioDTO.getEmail());
+        if (cambioEmail && usuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
+            log.error("El email {} ya está en uso por otro usuario", usuarioDTO.getEmail());
+            throw new UsuarioDuplicadoException("Ya existe un usuario con email: " + usuarioDTO.getEmail());
+        }
+
         usuarioExistente.setNombre(usuarioDTO.getNombre());
         usuarioExistente.setApellido(usuarioDTO.getApellido());
         usuarioExistente.setEmail(usuarioDTO.getEmail());

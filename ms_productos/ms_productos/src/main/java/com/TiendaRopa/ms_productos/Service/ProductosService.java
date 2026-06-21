@@ -4,12 +4,14 @@ import com.TiendaRopa.ms_productos.DTO.ProductosDTO;
 import com.TiendaRopa.ms_productos.Model.ProductosModel;
 import com.TiendaRopa.ms_productos.Repositories.ProductoRepository;
 import com.TiendaRopa.ms_productos.Exceptions.ProductoNotFoundException;
+import com.TiendaRopa.ms_productos.Exceptions.PrecioInvalidoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import java.util.List;
 
+import java.math.BigDecimal;
+import java.util.List;
 
 
 @Service
@@ -42,10 +44,15 @@ public class ProductosService {
     public ProductosModel crearProducto(ProductosDTO productoDTO) {
         log.info("Creando producto: {}", productoDTO.getNombre());
 
-        // Valida que la categoría existe en ms-categorias
-        validarCategoriaExiste(productoDTO.getCategoriaId());
+    // Regla de negocio: el precio debe ser mayor a cero
+    if (productoDTO.getPrecio() == null || productoDTO.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+        log.error("Precio inválido: {}", productoDTO.getPrecio());
+        throw new PrecioInvalidoException("El precio debe ser mayor a cero");
+    }
 
-        ProductosModel producto = new ProductosModel();
+    validarCategoriaExiste(productoDTO.getCategoriaId());
+
+    ProductosModel producto = new ProductosModel();
         producto.setNombre(productoDTO.getNombre());
         producto.setDescripcion(productoDTO.getDescripcion());
         producto.setPrecio(productoDTO.getPrecio());
@@ -54,12 +61,20 @@ public class ProductosService {
         producto.setCategoriaId(productoDTO.getCategoriaId());
 
         ProductosModel guardado = productoRepository.save(producto);
+        
         log.info("Producto creado con id: {}", guardado.getId());
         return guardado;
     }
 
     public ProductosModel actualizarProducto(Long id, ProductosDTO productoDTO) {
         log.info("Actualizando producto con id: {}", id);
+
+        // Regla de negocio: el precio debe ser mayor a cero
+        if (productoDTO.getPrecio() == null || productoDTO.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Precio inválido: {}", productoDTO.getPrecio());  
+            throw new PrecioInvalidoException("El precio debe ser mayor a cero");
+        }
+
         validarCategoriaExiste(productoDTO.getCategoriaId());
 
         ProductosModel producto = obtenerProductosPorId(id);
@@ -106,3 +121,5 @@ public class ProductosService {
     }
 
 }
+
+
