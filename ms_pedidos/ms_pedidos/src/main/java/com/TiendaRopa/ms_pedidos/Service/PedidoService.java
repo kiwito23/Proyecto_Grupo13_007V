@@ -7,6 +7,8 @@ import com.TiendaRopa.ms_pedidos.Model.DetallePedidoModel;
 import com.TiendaRopa.ms_pedidos.Model.PedidoModel;
 import com.TiendaRopa.ms_pedidos.Repositories.PedidoRepository;
 import com.TiendaRopa.ms_pedidos.Exceptions.PedidoNotFoundException;
+import com.TiendaRopa.ms_pedidos.Exceptions.EstadoInvalidoException;
+import com.TiendaRopa.ms_pedidos.Exceptions.PedidoDuplicadoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,13 +58,14 @@ public class PedidoService {
             nuevoEstado = PedidoModel.EstadoPedido.valueOf(dto.getEstado().toUpperCase());
         } catch (IllegalArgumentException e) {
             log.error("Estado inválido: {}", dto.getEstado());
-            throw new PedidoNotFoundException("Estado inválido: " + dto.getEstado());
+            throw new EstadoInvalidoException("Estado inválido: " + dto.getEstado());
         }
 
         
         if (pedido.getEstado() == PedidoModel.EstadoPedido.ENTREGADO ||
             pedido.getEstado() == PedidoModel.EstadoPedido.CANCELADO) {
-            throw new PedidoNotFoundException("No se puede modificar un pedido " + pedido.getEstado());
+            log.error("No se puede modificar un pedido en estado {}", pedido.getEstado());
+            throw new PedidoDuplicadoException("No se puede modificar un pedido " + pedido.getEstado());
         }
 
         pedido.setEstado(nuevoEstado);

@@ -7,6 +7,7 @@ import com.TiendaRopa.ms_inventario.Model.MovimientosInventarioModel;
 import com.TiendaRopa.ms_inventario.Repositories.InventarioRepository;
 import com.TiendaRopa.ms_inventario.Repositories.MovimientosInventarioRepository;
 import com.TiendaRopa.ms_inventario.Exceptions.InventarioNotFoundException;
+import com.TiendaRopa.ms_inventario.Exceptions.ProductoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class InventarioService {
 
         if (inventarioRepository.existsByProductoId(inventarioDTO.getProductoId())) {
             log.error("Ya existe un inventario para el producto ID: {}", inventarioDTO.getProductoId());
-            throw new InventarioNotFoundException("Ya existe un inventario para el producto ID: " + inventarioDTO.getProductoId());
+            throw new InventarioDuplicadoException("Ya existe un inventario para el producto ID: " + inventarioDTO.getProductoId());
         }
 
         InventarioModel inventario = new InventarioModel();
@@ -69,7 +70,7 @@ public class InventarioService {
             tipoMovimiento = MovimientosInventarioModel.TipoMovimiento.valueOf(movimientoDTO.getTipoMovimiento().toUpperCase());
         } catch (IllegalArgumentException e) {
             log.error("Tipo de movimiento inválido: {}", movimientoDTO.getTipoMovimiento());
-            throw new RuntimeException("Tipo de movimiento inválido: " + movimientoDTO.getTipoMovimiento());
+            throw new TipoMovimientoInvalidoException("Tipo de movimiento inválido: " + movimientoDTO.getTipoMovimiento());
         }
 
         if (tipoMovimiento == MovimientosInventarioModel.TipoMovimiento.ENTRADA) {
@@ -77,7 +78,7 @@ public class InventarioService {
         } else if (tipoMovimiento == MovimientosInventarioModel.TipoMovimiento.SALIDA) {
             if (inventario.getStockActual() < movimientoDTO.getCantidad()) {
                 log.error("No hay suficiente stock para realizar la salida. Stock actual: {}, Cantidad solicitada: {}", inventario.getStockActual(), movimientoDTO.getCantidad());
-                throw new RuntimeException("No hay suficiente stock para realizar la salida. Stock actual: " + inventario.getStockActual() + ", Cantidad solicitada: " + movimientoDTO.getCantidad());
+                throw new StockInsuficienteException("No hay suficiente stock para realizar la salida. Stock actual: " + inventario.getStockActual() + ", Cantidad solicitada: " + movimientoDTO.getCantidad());
             }
             inventario.setStockActual(inventario.getStockActual() - movimientoDTO.getCantidad());
         }
@@ -115,7 +116,7 @@ public class InventarioService {
                     .block();
         }catch (Exception e){
             log.error("El producto ID: {} no existe en el microservicio de productos", productoId);
-            throw new RuntimeException("El producto ID: " + productoId + " no existe en el microservicio de productos");
+            throw new ProductoNotFoundException("El producto ID: " + productoId + " no existe en el microservicio de productos");
         }
     }
 }
