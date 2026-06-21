@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
@@ -102,22 +104,24 @@ public class CategoriaServiceTest {
         verify(categoriaRepository, times(1)).findByEstado("ACTIVO");
     }
 
-    // Test 5 - Eliminar categoria
-    @Test
-    void testEliminarCategoria() {
-        // Given
-        Categoria cat = new Categoria();
-        cat.setId(1L);
-        cat.setNombre("Ropa Mujer");
+   // Test 5 - Eliminar categoria (borrado logico)
+@Test
+void testEliminarCategoria() {
+    // Given - categoria con estado ACTIVO
+    Categoria cat = new Categoria();
+    cat.setId(1L);
+    cat.setNombre("Ropa Mujer");
+    cat.setEstado("ACTIVO");
 
-        when(categoriaRepository.findById(1L)).thenReturn(Optional.of(cat));
-        doNothing().when(categoriaRepository).deleteById(1L);
+    when(categoriaRepository.findById(1L)).thenReturn(Optional.of(cat));
+    when(categoriaRepository.save(any(Categoria.class))).thenReturn(cat);
 
-        // When
-        categoriaService.eliminar(1L);
+    // When
+    categoriaService.eliminar(1L);
 
-        // Then
-        verify(categoriaRepository, times(1)).deleteById(1L);
+    // Then - verifica que se guardó con estado INACTIVO (borrado logico)
+    verify(categoriaRepository, times(1)).save(cat);
+    assertEquals("INACTIVO", cat.getEstado());
     }
 }
 

@@ -10,4 +10,11 @@ import java.util.List;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     List<Categoria> findByEstado(String estado);
     Categoria findByNombre(String nombre);
+    
+    // Verifica si existe una categoria con ese nombre
+    boolean existsByNombre(String nombre);
+    
+    // Verifica si existe una categoria con ese nombre pero con un ID diferente
+    // Se usa para validar duplicados al actualizar
+    boolean existsByNombreAndIdNot(String nombre, Long id);
 }

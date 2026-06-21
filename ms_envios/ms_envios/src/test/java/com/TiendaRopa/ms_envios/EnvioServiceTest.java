@@ -108,23 +108,22 @@ public class EnvioServiceTest {
     }
 
     // Test 5 - Actualizar estado del envio
-    @Test
-    void testActualizarEstado() {
-        // Given
-        EnvioModel envio = new EnvioModel();
-        envio.setId(1L);
-        envio.setEstado("PENDIENTE");
+@Test
+void testActualizarEstado() {
+    // Given - estado inicial PREPARANDO
+    EnvioModel envio = new EnvioModel();
+    envio.setId(1L);
+    envio.setEstado("PREPARANDO");
 
-        when(envioRepository.findById(1L)).thenReturn(Optional.of(envio));
-        when(envioRepository.save(envio)).thenReturn(envio);
+    when(envioRepository.findById(1L)).thenReturn(Optional.of(envio));
+    when(envioRepository.save(envio)).thenReturn(envio);
 
-        // When
-        EnvioModel resultado = envioService.actualizarEstado(1L, "ENVIADO");
+    // When - cambia a ENVIADO
+    EnvioModel resultado = envioService.actualizarEstado(1L, "ENVIADO");
 
-        // Then
-        assertNotNull(resultado);
-        assertEquals("ENVIADO", resultado.getEstado());
-        verify(envioRepository, times(1)).save(envio);
+    // Then
+    assertNotNull(resultado);
+    assertEquals("ENVIADO", resultado.getEstado());
+    verify(envioRepository, times(1)).save(envio);
     }
-
 }

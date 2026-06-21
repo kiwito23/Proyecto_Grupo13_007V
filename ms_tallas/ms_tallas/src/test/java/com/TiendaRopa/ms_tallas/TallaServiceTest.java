@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -101,23 +102,23 @@ public class TallaServiceTest {
         assertEquals("ACTIVO", resultado.get(0).getEstado());
         verify(tallaRepository, times(1)).findByEstado("ACTIVO");
     }
+// Test 5 - Eliminar talla (borrado logico)
+@Test
+void testEliminarTalla() {
+    // Given - talla con estado ACTIVO
+    Talla talla = new Talla();
+    talla.setId(1L);
+    talla.setNombre("XL");
+    talla.setEstado("ACTIVO");
 
-    // Test 5 - Eliminar talla
-    @Test
-    void testEliminarTalla() {
-        // Given
-        Talla talla = new Talla();
-        talla.setId(1L);
-        talla.setNombre("XL");
+    when(tallaRepository.findById(1L)).thenReturn(Optional.of(talla));
+    when(tallaRepository.save(any(Talla.class))).thenReturn(talla);
 
-        when(tallaRepository.findById(1L)).thenReturn(Optional.of(talla));
-        doNothing().when(tallaRepository).deleteById(1L);
+    // When
+    tallaService.eliminar(1L);
 
-        // When
-        tallaService.eliminar(1L);
-
-        // Then
-        verify(tallaRepository, times(1)).deleteById(1L);
+    // Then - verifica que se guardó con estado INACTIVO (borrado logico)
+    verify(tallaRepository, times(1)).save(talla);
+    assertEquals("INACTIVO", talla.getEstado());
     }
-
 }
