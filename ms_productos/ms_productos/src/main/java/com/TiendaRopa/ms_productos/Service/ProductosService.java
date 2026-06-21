@@ -85,18 +85,24 @@ public class ProductosService {
     }
 
     private void validarCategoriaExiste(Long categoriaId) {
+        log.info("Validando categoría id: {} en ms-categorias", categoriaId);
+        Object respuesta;
         try {
-            log.info("Validando categoría id: {} en ms-categorias", categoriaId);
-            webClientCategorias.get()
+            respuesta = webClientCategorias.get()
                     .uri("/api/categorias/{id}", categoriaId)
                     .retrieve()
                     .bodyToMono(Object.class)
                     .block();
-            log.info("Categoría id: {} validada correctamente", categoriaId);
         } catch (Exception e) {
+            log.error("Error de comunicación con ms-categorias al validar id: {}", categoriaId);
+            throw new ProductoNotFoundException("No se pudo contactar al servicio de categorías");
+        }
+
+        if (respuesta == null) {
             log.error("Categoría no encontrada en ms-categorias con id: {}", categoriaId);
             throw new ProductoNotFoundException("La categoría con id " + categoriaId + " no existe");
         }
+        log.info("Categoría id: {} validada correctamente", categoriaId);
     }
 
 }

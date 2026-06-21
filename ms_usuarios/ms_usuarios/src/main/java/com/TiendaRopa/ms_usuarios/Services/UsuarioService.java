@@ -4,6 +4,7 @@ import com.TiendaRopa.ms_usuarios.DTO.UsuarioDTO;
 import com.TiendaRopa.ms_usuarios.Model.UsuarioModel;
 import com.TiendaRopa.ms_usuarios.Repositories.UsuarioRepository;
 import com.TiendaRopa.ms_usuarios.Exceptions.UsuarioNotFoundException;
+import com.TiendaRopa.ms_usuarios.Exceptions.UsuarioDuplicadoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,11 @@ public class UsuarioService {
 
     public UsuarioModel crearUsuario(UsuarioDTO usuarioDTO) {
         log.info("Creando nuevo usuario con email: {}", usuarioDTO.getEmail());
-
+        
         if (usuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
             log.error("Ya existe un usuario con email: {}", usuarioDTO.getEmail());
-            throw new UsuarioNotFoundException("Ya existe un usuario con email: " + usuarioDTO.getEmail());
-        }
+            throw new UsuarioDuplicadoException("Ya existe un usuario con email: " + usuarioDTO.getEmail());
+        }else {
 
         UsuarioModel usuario = new UsuarioModel();
         usuario.setNombre(usuarioDTO.getNombre());
@@ -52,7 +53,8 @@ public class UsuarioService {
         UsuarioModel usuarioGuardado = usuarioRepository.save(usuario);
         log.info("Usuario creado exitosamente con id {}", usuarioGuardado.getId());
         return usuarioGuardado;
-        
+
+        }
     }
 
     public UsuarioModel actualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
