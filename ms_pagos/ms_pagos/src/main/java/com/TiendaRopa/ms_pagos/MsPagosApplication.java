@@ -2,8 +2,9 @@ package com.TiendaRopa.ms_pagos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class})
 public class MsPagosApplication {
     public static void main(String[] args) {
         SpringApplication.run(MsPagosApplication.class, args);
