@@ -7,10 +7,10 @@ import com.TiendaRopa.ms_inventario.Model.MovimientosInventarioModel;
 import com.TiendaRopa.ms_inventario.Repositories.InventarioRepository;
 import com.TiendaRopa.ms_inventario.Repositories.MovimientosInventarioRepository;
 import com.TiendaRopa.ms_inventario.Exceptions.InventarioNotFoundException;
-import com.TiendaRopa.ms_inventario.Exceptions.ProductoNotFoundException;
 import com.TiendaRopa.ms_inventario.Exceptions.InventarioDuplicadoException;
 import com.TiendaRopa.ms_inventario.Exceptions.StockInsuficienteException;
 import com.TiendaRopa.ms_inventario.Exceptions.TipoMovimientoInvalidoException;
+import com.TiendaRopa.ms_inventario.Exceptions.ProductoNoEncontradoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class InventarioService {
         if (movimientoDTO.getCantidad() == null || movimientoDTO.getCantidad() <= 0) {
             log.error("Cantidad inválida en movimiento: {}", movimientoDTO.getCantidad());
             throw new TipoMovimientoInvalidoException("La cantidad del movimiento debe ser mayor a cero");
-            }
+        }
 
         InventarioModel inventario = obtenerPorProductoId(productoId);
 
@@ -79,7 +79,7 @@ public class InventarioService {
             tipoMovimiento = MovimientosInventarioModel.TipoMovimiento.valueOf(movimientoDTO.getTipoMovimiento().toUpperCase());
         } catch (IllegalArgumentException e) {
             log.error("Tipo de movimiento inválido: {}", movimientoDTO.getTipoMovimiento());
-            throw new TipoMovimientoInvalidoException("Tipo de movimiento inválido: " + movimientoDTO.getTipoMovimiento());
+            throw new TipoMovimientoInvalidoException("Tipo de movimiento inválido: " + movimientoDTO.getTipoMovimiento() + ". Debe ser ENTRADA o SALIDA");
         }
 
         if (tipoMovimiento == MovimientosInventarioModel.TipoMovimiento.ENTRADA) {
@@ -116,6 +116,12 @@ public class InventarioService {
     }
 
     public void validarProductoExistente(Long productoId) {
+        // Regla de negocio: el ID del producto debe ser válido antes de consultar el servicio externo
+        if (productoId == null || productoId <= 0) {
+            log.error("ID de producto inválido para validar existencia: {}", productoId);
+            throw new ProductoNoEncontradoException("El ID del producto debe ser un valor válido mayor a cero");
+        }
+
         try{
             log.info("Validando existencia del producto ID: {} en el microservicio de productos", productoId);
             webClientProductos.get()
@@ -123,9 +129,12 @@ public class InventarioService {
                     .retrieve()
                     .bodyToMono(Object.class)
                     .block();
-        }catch (Exception e){
+        } catch (org.springframework.web.reactive.function.client.WebClientResponseException.NotFound e) {
             log.error("El producto ID: {} no existe en el microservicio de productos", productoId);
-            throw new ProductoNotFoundException("El producto ID: " + productoId + " no existe en el microservicio de productos");
+            throw new ProductoNoEncontradoException("El producto ID: " + productoId + " no existe en el microservicio de productos");
+        } catch (Exception e){
+            log.error("No fue posible validar el producto ID: {} en el microservicio de productos: {}", productoId, e.getMessage());
+            throw new ProductoNoEncontradoException("El producto ID: " + productoId + " no existe o el microservicio de productos no está disponible");
         }
     }
 }

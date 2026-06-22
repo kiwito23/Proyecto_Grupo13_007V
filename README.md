@@ -98,23 +98,18 @@ cd Proyecto_Grupo13_007V
 ```bash
 docker-compose up --build
 ```
+
+**Verificar que todos los servicios estén corriendo**
+```bash
+docker ps
+```
+
 ### Perfiles de configuración
 Cada microservicio cuenta con 3 perfiles de configuración:
 
 - **dev** → Desarrollo local, conecta a MySQL en localhost
 - **docker** → Despliegue con Docker, conecta a MySQL en contenedor
 - **test** → Pruebas unitarias con H2 en memoria
-
-Para ejecutar con un perfil específico:
-```bash
-.\mvnw spring-boot:run -Dspring-boot.run.profiles=dev
-```
-
-
-**Verificar que todos los servicios estén corriendo**
-```bash
-docker ps
-```
 
 Deben aparecer 22 contenedores: 
 10 microservicios + 10 bases de datos MySQL + api-gateway + eureka-server.
@@ -126,6 +121,11 @@ cd ms_categorias/ms_categorias
 ```
 ```bash
 .\mvnw test
+```
+
+**Para ejecutar con un perfil específico:**
+```bash
+.\mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 
