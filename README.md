@@ -95,13 +95,29 @@ Usar el token retornado como 'Bearer Token' en el header 'Authorization'.
 ```bash
 cd Proyecto_Grupo13_007V
 ```
+
+**Primera ejecución (construcción de las imágenes):**
+
+Al ejecutar el proyecto por primera vez, es necesario construir las imágenes de cada servicio:
+
 ```bash
 docker-compose up --build
 ```
 
+**Ejecuciones posteriores:**
+
+Una vez construidas las imágenes, el sistema puede levantarse en segundo plano sin necesidad de reconstruir nuevamente:
+
+```bash
+docker-compose up -d
+```
+
+> Se recomienda utilizar `--build` cada vez que se realicen cambios en el código fuente o en la configuración de algún microservicio,
+para asegurar que la imagen se actualice correctamente.
+
 **Verificar que todos los servicios estén corriendo**
 ```bash
-docker ps
+docker-compose ps
 ```
 
 ### Perfiles de configuración
