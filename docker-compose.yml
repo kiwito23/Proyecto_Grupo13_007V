@@ -302,7 +302,7 @@ services:
   # --- API GATEWAY ---
   api-gateway:
     build:
-      context: ./api-gateway/api-gateway
+      context: ./api-gateway
     container_name: api-gateway
     restart: always
     ports:
