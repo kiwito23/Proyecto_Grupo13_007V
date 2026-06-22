@@ -106,9 +106,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(ProductoNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProductoNotFound(
-            ProductoNotFoundException ex,
+    @ExceptionHandler(ProductoNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleProductoNoEncontrado(
+            ProductoNoEncontradoException ex,
             HttpServletRequest request) {
 
         log.error("Producto no encontrado en {}: {}", request.getRequestURI(), ex.getMessage());
